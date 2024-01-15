@@ -24,7 +24,7 @@ export default function Register() {
         formState: { errors },
     } = useForm<UserInput>();
     const onSubmit = async (Data: UserInput) => {
-        const { data } = await axios.post('/api/userAuth', Data)
+        const { data } = await axios.post('/api/register', Data)
         setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
         setTimeout(() => {
             setAlter({ ...alter, alterShow: false })
