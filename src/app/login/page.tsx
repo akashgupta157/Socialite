@@ -28,10 +28,14 @@ export default function Login() {
   } = useForm<UserInput>();
   const onSubmit = async (Data: UserInput) => {
     const { data } = await axios.post('/api/login', Data)
+    const user = data.user
     setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
     setTimeout(() => {
       setAlter({ ...alter, alterShow: false })
-      router.push('/')
+      if (data.success) {
+        sessionStorage.setItem("user", JSON.stringify({ token: data.token, success: data.success, ...user }))
+        router.push('/')
+      }
     }, 2500);
   }
   return (

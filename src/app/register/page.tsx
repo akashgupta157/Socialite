@@ -28,6 +28,10 @@ export default function Register() {
         setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
         setTimeout(() => {
             setAlter({ ...alter, alterShow: false })
+            if (data.success) {
+                sessionStorage.setItem("user", JSON.stringify({ token: data.token, success: data.success, ...user }))
+                router.push('/')
+            }
         }, 2500);
     }
     return (
