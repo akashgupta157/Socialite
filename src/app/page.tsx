@@ -1,5 +1,12 @@
-export default function Home() {
+"use client"
+import isAuth from "@/isAuth";
+const Home = () => {
   return (
-    <main>Hi</main>
-  )
-}
+    <main className="h-screen flex justify-center items-center">
+      <p>Dashboard</p>
+    </main>
+  );
+};
+
+
+export default isAuth(Home);

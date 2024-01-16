@@ -7,6 +7,8 @@ import { AtSign, LockKeyhole, Eye, EyeOff, AlertCircle, CheckCircle } from 'luci
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
+import { useDispatch } from "react-redux";
+import { LOGIN } from '@/redux/slices/userSlice';
 const Image = React.lazy(() => import('next/image'));
 interface UserInput {
   name: string;
@@ -26,14 +28,15 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<UserInput>();
+  const dispatch = useDispatch()
   const onSubmit = async (Data: UserInput) => {
     const { data } = await axios.post('/api/login', Data)
-    const user = data.user
     setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
     setTimeout(() => {
       setAlter({ ...alter, alterShow: false })
       if (data.success) {
-        sessionStorage.setItem("user", JSON.stringify({ token: data.token, success: data.success, ...user }))
+        sessionStorage.setItem("user", JSON.stringify({ token: data.token, ...data.user }))
+        dispatch(LOGIN({ ...data.user, token: data.token }))
         router.push('/')
       }
     }, 2500);
@@ -116,7 +119,7 @@ export default function Login() {
           <p className='w-full max-w-xs'>Don't have an account? <Link href={'/register'} className='underline text-blue-700'>Register</Link></p>
         </form>
         <div className='w-[50%] hidden md:flex justify-center items-center bg-blue-100'>
-          <Image src={loginImage} alt='loginImage' className='object-contain' />
+          <Image src={loginImage} alt='loginImage' className='object-contain' priority />
         </div>
       </div>
     </>

@@ -5,6 +5,9 @@ import registerImage from '@/images/register.png';
 import { User, AtSign, LockKeyhole, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from "react-redux";
+import { LOGIN } from '@/redux/slices/userSlice';
 const Image = React.lazy(() => import('next/image'));
 interface UserInput {
     name: string;
@@ -13,6 +16,7 @@ interface UserInput {
 }
 export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter()
     const [alter, setAlter] = useState({
         alterShow: false,
         success: false,
@@ -23,13 +27,15 @@ export default function Register() {
         handleSubmit,
         formState: { errors },
     } = useForm<UserInput>();
+    const dispatch = useDispatch()
     const onSubmit = async (Data: UserInput) => {
         const { data } = await axios.post('/api/register', Data)
         setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
         setTimeout(() => {
             setAlter({ ...alter, alterShow: false })
             if (data.success) {
-                sessionStorage.setItem("user", JSON.stringify({ token: data.token, success: data.success, ...user }))
+                sessionStorage.setItem("user", JSON.stringify({ token: data.token, ...data.user }))
+                dispatch(LOGIN({ ...data.user, token: data.token }))
                 router.push('/')
             }
         }, 2500);
@@ -52,7 +58,7 @@ export default function Register() {
             }
             <div className='flex h-[100vh] w-[100vw]'>
                 <div className='w-[50%] hidden md:flex justify-center items-center bg-blue-100'>
-                    <Image src={registerImage} alt='registerImage' className='object-contain' />
+                    <Image src={registerImage} alt='registerImage' className='object-contain' priority />
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className='gap-3 md:w-[50%] m-auto flex flex-col justify-center items-center'>
                     <h1 className='text-3xl w-full font-medium max-w-xs pb-1 mb-2 border-b-2 border-blue-500'>Registration</h1>
