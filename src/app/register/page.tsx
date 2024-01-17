@@ -66,13 +66,13 @@ export default function Register() {
                 <form onSubmit={handleSubmit(onSubmit)} className='gap-3 md:w-[50%] m-auto flex flex-col justify-center items-center'>
                     <h1 className='text-3xl w-full font-medium max-w-xs pb-1 mb-2 border-b-2 border-blue-500'>Registration</h1>
                     <label className="form-control w-full max-w-xs" htmlFor='name'>
-                        <p>Name :</p>
-                        <div className='flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600'>
+                        <p className={`${errors.name && 'text-red-700'}`}>Name :</p>
+                        <div className={`flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.name && 'border-red-700 focus-within:border-red-700'}`}>
                             <User />
                             <input
                                 type="text"
                                 id="name"
-                                className='border-0 outline-none'
+                                className='border-0 outline-none w-full'
                                 {...register("name", {
                                     required: "Name is required",
                                     minLength: {
@@ -94,13 +94,13 @@ export default function Register() {
                         )}
                     </label>
                     <label className="form-control w-full max-w-xs" htmlFor='email'>
-                        <p>Email :</p>
-                        <div className='flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600'>
+                        <p className={`${errors.email && 'text-red-700'}`}>Email :</p>
+                        <div className={`flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.email && 'border-red-700 focus-within:border-red-700'}`}>
                             <AtSign />
                             <input
                                 type="text"
                                 id="email"
-                                className='border-0 outline-none'
+                                className='border-0 outline-none w-full'
                                 {...register("email", {
                                     required: "Email is required",
                                     pattern: {
@@ -118,13 +118,13 @@ export default function Register() {
                         )}
                     </label>
                     <label className="form-control w-full max-w-xs" htmlFor='password'>
-                        <p>Password :</p>
-                        <div className='flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600'>
+                        <p className={`${errors.password && 'text-red-700'}`}>Password :</p>
+                        <div className={`flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.password && 'border-red-700 focus-within:border-red-700'}`}>
                             <LockKeyhole />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 id="password"
-                                className='border-0 outline-none'
+                                className='border-0 outline-none w-full'
                                 {...register("password", {
                                     required: "Password is required",
                                     minLength: {
