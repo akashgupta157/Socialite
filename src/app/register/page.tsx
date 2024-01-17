@@ -16,6 +16,7 @@ interface UserInput {
 }
 export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const router = useRouter()
     const [alter, setAlter] = useState({
         alterShow: false,
@@ -29,7 +30,9 @@ export default function Register() {
     } = useForm<UserInput>();
     const dispatch = useDispatch()
     const onSubmit = async (Data: UserInput) => {
+        setLoading(true)
         const { data } = await axios.post('/api/register', Data)
+        setLoading(false)
         setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
         setTimeout(() => {
             setAlter({ ...alter, alterShow: false })
@@ -38,7 +41,7 @@ export default function Register() {
                 dispatch(LOGIN({ ...data.user, token: data.token }))
                 router.push('/')
             }
-        }, 2500);
+        }, 1500);
     }
     return (
         <>
@@ -145,7 +148,17 @@ export default function Register() {
                             </p>
                         )}
                     </label>
-                    <button className="btn px-16 bg-blue-500 text-white hover:bg-blue-600" type='submit'>Submit</button>
+                    <button
+                        className="btn px-16 bg-blue-500 text-white hover:bg-blue-600"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <span className="loading loading-dots loading-lg bg-blue-500"></span>
+                        ) : (
+                            'Submit'
+                        )}
+                    </button>
                     <p className='w-full max-w-xs'>Already have an account? <Link href={'/login'} className='underline text-blue-700'>Login</Link></p>
                 </form>
             </div>
