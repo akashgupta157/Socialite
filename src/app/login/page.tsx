@@ -38,6 +38,7 @@ export default function Login() {
     setTimeout(() => {
       setAlter({ ...alter, alterShow: false })
       if (data.success) {
+        sessionStorage.setItem('user', JSON.stringify({ ...data.user, token: data.token }))
         dispatch(LOGIN({ ...data.user, token: data.token }))
         router.push('/')
       }

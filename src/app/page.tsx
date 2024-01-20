@@ -2,12 +2,16 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import isAuth from "@/IsCompAuth";
+import Feed from "@/components/Feed";
+import { useSelector } from "react-redux";
 const Home = () => {
+  const selected = useSelector((state: any) => state.selection.selected)
   return (
     <main >
       <Navbar />
-      <div >
+      <div className="flex">
         <Sidebar />
+        {selected === 'Home' && <Feed />}
       </div>
     </main>
   );
