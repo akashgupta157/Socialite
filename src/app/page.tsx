@@ -16,9 +16,8 @@ const Home = () => {
     </main>
   );
 };
-
-
 export default isAuth(Home);
+// export default Home;
 // Custom Login/SignUp
 // Feeds/Posts
 // Add posts

@@ -1,10 +1,11 @@
-// 'use client'
+'use client'
 import React from 'react'
 import { Home, Compass, Bookmark, User, LogOut } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SELECTION } from '@/redux/slices/selectedSlice';
 import { LOGOUT } from '@/redux/slices/userSlice';
 import { useRouter } from 'next/navigation';
+import { deleteCookie } from 'cookies-next';
 export default function Sidebar() {
     const selected = useSelector((state: any) => state.selection.selected)
     const dispatch = useDispatch()
@@ -18,6 +19,7 @@ export default function Sidebar() {
                 <span onClick={() => dispatch(SELECTION("Profile"))} className={`flex items-center gap-2 px-5 py-3 rounded-lg cursor-pointer ${selected === 'Profile' ? 'bg-[#0381ec] text-white' : 'hover:bg-gray-200'}`}><User />Profile</span>
             </div>
             <span onClick={() => {
+                deleteCookie('user');
                 dispatch(LOGOUT())
                 router.push('/login')
             }} className='flex items-center gap-2 px-5 py-3 rounded-lg cursor-pointer text-[#0381ec] border hover:bg-gray-200'><LogOut />Logout</span>
