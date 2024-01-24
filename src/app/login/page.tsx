@@ -32,7 +32,7 @@ export default function Login() {
   const dispatch = useDispatch()
   const onSubmit = async (Data: UserInput) => {
     setLoading(true)
-    const { data } = await axios.post('/api/login', Data)
+    const { data } = await axios.post('/api/auth/login', Data)
     setLoading(false)
     setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
     setTimeout(() => {

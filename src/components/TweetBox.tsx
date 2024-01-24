@@ -2,12 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { X, Image as ImageIcon, Smile } from 'lucide-react';
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { useSelector } from 'react-redux';
+import { headers } from 'next/headers';
+import axios from 'axios';
 export default function TweetBox() {
     const [loading, setLoading] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
     const [input, setInput] = useState('');
     const [isEmojiOpen, setEmojiOpen] = useState(false);
-
+    const token = useSelector((state: any) => state.user.user.token)
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
     const addEmoji = (e: { unified: string }) => {
         const sym = e.unified.split("_");
         const arr: string[] = [];
@@ -43,7 +51,17 @@ export default function TweetBox() {
         return () => {
             window.removeEventListener('click', handleOutsideClick);
         };
-    }, [isEmojiOpen]);
+    }, [isEmojiOpen])
+        ;
+    const handlePost = async () => {
+        if (input) {
+            setLoading(true);
+            await axios.post('/api/post', {
+                content: input
+            }, config)
+            setLoading(false);
+        }
+    }
     return (
         <div className={`w-full max-h-[85vh] border rounded-lg p-4 ${loading && 'opacity-60'}`}>
             <textarea
@@ -80,7 +98,7 @@ export default function TweetBox() {
                             )}
                         </div>
                     </div>
-                    <button className="bg-[#0381ec] text-white rounded-full py-2 px-4 text-sm font-bold">Post Now</button>
+                    <button onClick={handlePost} className="bg-[#0381ec] text-white rounded-full py-2 px-4 text-sm font-bold">Post Now</button>
                 </div>
             )}
         </div>

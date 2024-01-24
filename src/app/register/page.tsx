@@ -31,7 +31,7 @@ export default function Register() {
     const dispatch = useDispatch()
     const onSubmit = async (Data: UserInput) => {
         setLoading(true)
-        const { data } = await axios.post('/api/register', Data)
+        const { data } = await axios.post('/api/auth/register', Data)
         setLoading(false)
         setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
         setTimeout(() => {
