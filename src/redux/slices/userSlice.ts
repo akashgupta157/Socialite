@@ -10,12 +10,10 @@ const userSlice = createSlice({
     LOGIN: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = true;
-      sessionStorage.setItem("user", JSON.stringify(action.payload));
     },
     LOGOUT: (state) => {
       state.user = null;
       state.isAuthenticated = false;
-      sessionStorage.removeItem("user");
     },
   },
 });

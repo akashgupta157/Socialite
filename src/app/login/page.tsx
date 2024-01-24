@@ -9,7 +9,6 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation'
 import { useDispatch } from "react-redux";
 import { LOGIN } from '@/redux/slices/userSlice';
-import { setCookie } from 'cookies-next';
 const Image = React.lazy(() => import('next/image'));
 interface UserInput {
   name: string;
@@ -39,7 +38,6 @@ export default function Login() {
     setTimeout(() => {
       setAlter({ ...alter, alterShow: false })
       if (data.success) {
-        setCookie('user', JSON.stringify({ ...data.user, token: data.token }));
         dispatch(LOGIN({ ...data.user, token: data.token }))
         router.push('/')
       }
