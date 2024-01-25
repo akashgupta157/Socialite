@@ -9,12 +9,16 @@ export const POST = async (req: NextRequest) => {
     const headersInstance = headers();
     const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
     const payload = jwt.decode(BearerToken) as JwtPayload;
-    const { content } = await req.json();
+    const { content, attachments } = await req.json();
     postModel.create({
       user: payload.userId,
       content,
+      attachments,
     });
-    return NextResponse.json({ message: "Post created successfully", success: true });
+    return NextResponse.json({
+      message: "Post created successfully",
+      success: true,
+    });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });
   }

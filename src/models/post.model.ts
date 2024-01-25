@@ -17,7 +17,12 @@ const post = mongoose.Schema(
     ],
     attachments: [
       {
-        type: String,
+        publicId: {
+          type: String,
+        },
+        url: {
+          type: String,
+        },
       },
     ],
     likes: [
