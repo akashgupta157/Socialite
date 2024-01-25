@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation'
 import { useDispatch } from "react-redux";
 import { LOGIN } from '@/redux/slices/userSlice';
+import toast from 'react-hot-toast';
 const Image = React.lazy(() => import('next/image'));
 interface UserInput {
   name: string;
@@ -34,31 +35,41 @@ export default function Login() {
     setLoading(true)
     const { data } = await axios.post('/api/auth/login', Data)
     setLoading(false)
-    setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
-    setTimeout(() => {
-      setAlter({ ...alter, alterShow: false })
-      if (data.success) {
-        dispatch(LOGIN({ ...data.user, token: data.token }))
+    if (data.success) {
+      toast.success(data.message, {
+        duration: 1500,
+        position: 'top-right',
+        style: {
+          backgroundColor: "#17C60D",
+          color: 'white'
+        },
+        iconTheme: {
+          primary: 'white',
+          secondary: "#17C60D"
+        }
+      })
+      dispatch(LOGIN({ ...data.user, token: data.token }))
+      setTimeout(() => {
         router.push('/')
-      }
-    }, 1500);
+      }, 1500);
+    } else {
+      toast.error(data.message, {
+        duration: 2000,
+        position: 'top-right',
+        style: {
+          backgroundColor: "#E03615",
+          color: 'white'
+        },
+        iconTheme: {
+          primary: 'white',
+          secondary: "#E03615"
+        }
+      })
+    }
   }
   return (
     <>
-      {
-        alter.alterShow &&
-        <div className="toast toast-top toast-end">
-          {
-            alter.success ?
-              <div className="alert alert-success">
-                <span className='flex gap-2 items-center text-white'><CheckCircle />{alter.message}</span>
-              </div> :
-              <div className="alert alert-error">
-                <span className='flex gap-2 items-center text-white'><AlertCircle />{alter.message}</span>
-              </div>
-          }
-        </div>
-      }
+
       <div className='flex h-[100vh] w-[100vw]'>
         <form onSubmit={handleSubmit(onSubmit)} className='gap-3 md:w-[50%] m-auto flex flex-col justify-center items-center'>
           <h1 className='text-3xl w-full font-medium max-w-xs pb-1 mb-2 border-b-2 border-blue-500'>Login</h1>

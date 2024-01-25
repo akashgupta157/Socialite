@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import registerImage from '@/images/register.png';
-import { User, AtSign, LockKeyhole, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, AtSign, LockKeyhole, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from "react-redux";
 import { LOGIN } from '@/redux/slices/userSlice';
+import toast from 'react-hot-toast';
 const Image = React.lazy(() => import('next/image'));
 interface UserInput {
     name: string;
@@ -18,11 +19,6 @@ export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const router = useRouter()
-    const [alter, setAlter] = useState({
-        alterShow: false,
-        success: false,
-        message: ''
-    });
     const {
         register,
         handleSubmit,
@@ -33,31 +29,40 @@ export default function Register() {
         setLoading(true)
         const { data } = await axios.post('/api/auth/register', Data)
         setLoading(false)
-        setAlter({ ...alter, alterShow: true, success: data.success, message: data.message })
-        setTimeout(() => {
-            setAlter({ ...alter, alterShow: false })
-            if (data.success) {
-                dispatch(LOGIN({ ...data.user, token: data.token }))
+        if (data.success) {
+            toast.success(data.message, {
+                duration: 1500,
+                position: 'top-right',
+                style: {
+                    backgroundColor: "#17C60D",
+                    color: 'white'
+                },
+                iconTheme: {
+                    primary: 'white',
+                    secondary: "#17C60D"
+                }
+            })
+            dispatch(LOGIN({ ...data.user, token: data.token }))
+            setTimeout(() => {
                 router.push('/')
-            }
-        }, 1500);
+            }, 1500);
+        } else {
+            toast.error(data.message, {
+                duration: 2000,
+                position: 'top-right',
+                style: {
+                    backgroundColor: "#E03615",
+                    color: 'white'
+                },
+                iconTheme: {
+                    primary: 'white',
+                    secondary: "#E03615"
+                }
+            })
+        }
     }
     return (
         <>
-            {
-                alter.alterShow &&
-                <div className="toast toast-top toast-end">
-                    {
-                        alter.success ?
-                            <div className="alert alert-success">
-                                <span className='flex gap-2 items-center text-white'><CheckCircle />{alter.message}</span>
-                            </div> :
-                            <div className="alert alert-error">
-                                <span className='flex gap-2 items-center text-white'><AlertCircle />{alter.message}</span>
-                            </div>
-                    }
-                </div>
-            }
             <div className='flex h-[100vh] w-[100vw]'>
                 <div className='w-[50%] hidden md:flex justify-center items-center bg-blue-100'>
                     <Image src={registerImage} alt='registerImage' className='object-contain' priority />
