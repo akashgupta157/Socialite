@@ -10,3 +10,10 @@ export const uploadCloudinary = async (file: string | Blob) => {
   );
   return { publicId: data?.public_id, url: data?.secure_url };
 };
+export function configure(token: any) {
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+}

@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { X, Image as ImageIcon, Smile, ArrowBigDown } from 'lucide-react';
+import { X, Image as ImageIcon, Smile } from 'lucide-react';
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { uploadCloudinary } from './misc';
+import { configure, uploadCloudinary } from './misc';
 export default function TweetBox() {
     const [loading, setLoading] = useState(false);
-    const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [input, setInput] = useState('');
     const [isEmojiOpen, setEmojiOpen] = useState(false);
     const token = useSelector((state: any) => state.user.user.token)
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
+    const config = configure(token)
     const addEmoji = (e: { unified: string }) => {
         const sym = e.unified.split("_");
         const arr: string[] = [];
@@ -23,11 +19,16 @@ export default function TweetBox() {
         let emoji = String.fromCodePoint(...arr.map(Number));
         setInput(input + emoji);
     };
-    // const removeImage = (index: number) => {
-    //     const newFiles = [...displayFiles];
-    //     newFiles.splice(index, 1);
-    //     setDisplayFiles(newFiles);
-    // };
+    const handleFileChange = (e: any) => {
+        const selectedFilesArray: File[] = Array.from(e.target.files);
+        const newSelectedFiles = selectedFilesArray.slice(0, 4);
+        setSelectedFiles(newSelectedFiles);
+    };
+    const removeImage = (index: number) => {
+        const newFiles = [...selectedFiles];
+        newFiles.splice(index, 1);
+        setSelectedFiles(newFiles);
+    };
     const handleOutsideClick = (event: any) => {
         if (isEmojiOpen && !event.target.closest('.emoji-dropdown')) {
             setEmojiOpen(false);
@@ -39,7 +40,7 @@ export default function TweetBox() {
             window.removeEventListener('click', handleOutsideClick);
         };
     }, [isEmojiOpen]);
-
+    console.log(selectedFiles)
     const handlePost = async () => {
         if (!input) return;
         setLoading(true);
@@ -73,25 +74,26 @@ export default function TweetBox() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder='What are you thinking?' />
-            <div className='max-h-[40vh] overflow-y-scroll'>
-                {/* {displayFiles.map((file, index) => (
-                    <div key={index} className='relative mb-4'>
-                        <div className='absolute w-8 h-8 bg-[#78828e] bg-opacity-75 rounded-full flex items-center justify-center top-1 left-1 cursor-pointer' onClick={() => removeImage(index)}>
-                            <X />
+            {
+                selectedFiles &&
+                <div className='max-h-[40vh] overflow-y-scroll'>
+                    {selectedFiles.map((file, index) => (
+                        <div key={index} className='relative mb-4'>
+                            <div className='absolute w-8 h-8 bg-[#78828e] bg-opacity-75 rounded-full flex items-center justify-center top-1 left-1 cursor-pointer' onClick={() => removeImage(index)}>
+                                <X />
+                            </div>
+                            <img src={URL.createObjectURL(file)} alt={`Selected File ${index}`} className="max-h-[200px] max-w-full mb-2 rounded-lg" />
                         </div>
-                        <img src={file} alt={`image-${index}`} className='rounded-2xl max-h-80 object-contain' />
-                    </div>
-                ))} */}
-            </div>
+                    ))}
+                </div>
+            }
             <div className='flex justify-between items-center border-t pt-2'>
                 <div className='flex items-center gap-3'>
                     <div className='flex gap-4 text-lg text-[#0381ec]'>
                         <label htmlFor="file">
                             <ImageIcon className='cursor-pointer' />
                         </label>
-                        <input type="file" name="" id="file" accept="image/*" hidden multiple onChange={(e: any) => {
-                            setSelectedFiles(e.target.files)
-                        }} />
+                        <input type="file" name="" id="file" accept="image/*" hidden multiple onChange={handleFileChange} />
                     </div>
                     <div className='flex gap-4 text-lg text-[#0381ec] relative emoji-dropdown'>
                         <Smile className='cursor-pointer' onClick={() => setEmojiOpen(!isEmojiOpen)} />
