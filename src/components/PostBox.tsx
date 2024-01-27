@@ -5,7 +5,7 @@ import Picker from "@emoji-mart/react";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { configure, uploadCloudinary } from './misc';
-export default function TweetBox() {
+export default function PostBox() {
     const [loading, setLoading] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [input, setInput] = useState('');
@@ -40,7 +40,6 @@ export default function TweetBox() {
             window.removeEventListener('click', handleOutsideClick);
         };
     }, [isEmojiOpen]);
-    console.log(selectedFiles)
     const handlePost = async () => {
         if (!input) return;
         setLoading(true);
@@ -65,7 +64,6 @@ export default function TweetBox() {
             setLoading(false);
         }
     };
-
     return (
         <div className={`w-full max-h-[85vh] border rounded-lg p-4 ${loading && 'pointer-events-none opacity-50'}`}>
             <textarea

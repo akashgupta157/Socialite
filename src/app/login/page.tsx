@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import loginImage from '@/images/login.png';
-import { AtSign, LockKeyhole, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { AtSign, LockKeyhole, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
@@ -20,11 +20,6 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter()
-  const [alter, setAlter] = useState({
-    alterShow: false,
-    success: false,
-    message: ''
-  });
   const {
     register,
     handleSubmit,
@@ -48,6 +43,7 @@ export default function Login() {
           secondary: "#17C60D"
         }
       })
+      sessionStorage.setItem('user', JSON.stringify({ ...data.user, token: data.token }))
       dispatch(LOGIN({ ...data.user, token: data.token }))
       setTimeout(() => {
         router.push('/')

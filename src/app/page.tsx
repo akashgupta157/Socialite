@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <main >
       <Navbar />
-      <div className="flex">
+      <div className="md:flex">
         <Sidebar />
         {selected === 'Home' && <Feed />}
       </div>

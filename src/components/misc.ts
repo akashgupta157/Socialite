@@ -17,3 +17,4 @@ export function configure(token: any) {
     },
   };
 }
+
