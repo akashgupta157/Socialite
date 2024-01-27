@@ -19,6 +19,7 @@ export default function Sidebar() {
                     <span onClick={() => dispatch(SELECTION("Profile"))} className={`flex items-center gap-2 px-5 py-3 rounded-lg cursor-pointer ${selected === 'Profile' ? 'bg-[#0381ec] text-white' : 'hover:bg-gray-200'}`}><User />Profile</span>
                 </div>
                 <span onClick={() => {
+                    sessionStorage.removeItem('user')
                     dispatch(LOGOUT())
                     router.push('/login')
                 }} className='flex items-center gap-2 px-5 py-3 rounded-lg cursor-pointer text-[#0381ec] border hover:bg-gray-200'><LogOut />Logout</span>

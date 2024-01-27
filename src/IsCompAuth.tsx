@@ -9,7 +9,7 @@ export default function isAuth(Component: any) {
         useEffect(() => {
             const user = sessionStorage.getItem("user");
             if (user) {
-                dispatch(LOGIN(user));
+                dispatch(LOGIN(JSON.parse(user)));
             } else if (!isAuthenticated) {
                 return redirect("/login");
             }
