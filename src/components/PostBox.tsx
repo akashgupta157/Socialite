@@ -9,6 +9,7 @@ export default function PostBox() {
     const [loading, setLoading] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [input, setInput] = useState('');
+    const [isEmojiOpen, setEmojiOpen] = useState(false);
     const token = useSelector((state: any) => state.user.user.token)
     const config = configure(token)
     const addEmoji = (e: { unified: string }) => {
@@ -28,6 +29,17 @@ export default function PostBox() {
         newFiles.splice(index, 1);
         setSelectedFiles(newFiles);
     };
+    const handleOutsideClick = (event: any) => {
+        if (isEmojiOpen && !event.target.closest('.emoji-dropdown')) {
+            setEmojiOpen(false);
+        }
+    };
+    useEffect(() => {
+        window.addEventListener('click', handleOutsideClick);
+        return () => {
+            window.removeEventListener('click', handleOutsideClick);
+        };
+    }, [isEmojiOpen]);
     const handlePost = async () => {
         if (!input) return;
         setLoading(true);
@@ -98,12 +110,12 @@ export default function PostBox() {
                         <input type="file" name="" id="file" accept="image/*" hidden multiple onChange={handleFileChange} />
                     </div>
                     <div className='flex gap-4 text-lg text-[#0381ec] relative emoji-dropdown'>
-                        <Smile className='cursor-pointer' />
-                        {/* {isEmojiOpen && (
+                        <Smile className='cursor-pointer' onClick={() => setEmojiOpen(!isEmojiOpen)} />
+                        {isEmojiOpen && (
                             <div className='absolute top-8 left-0'>
                                 <Picker data={data} onEmojiSelect={addEmoji} />
                             </div>
-                        )} */}
+                        )}
                     </div>
                 </div>
                 <button onClick={handlePost} className="bg-[#0381ec] text-white rounded-full py-2 px-4 text-sm font-bold">Post Now</button>
