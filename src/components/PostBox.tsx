@@ -77,30 +77,32 @@ export default function PostBox() {
         }
     };
     return (
-        <div className={`w-full max-h-[82vh] overflow-scroll scrollbar-none md:max-h-[85vh] border rounded-lg p-4 ${loading && 'pointer-events-none opacity-50'}`}>
-            <textarea
-                className='w-full border-none outline-none bg-transparent text-lg max-h-[30vh]'
-                rows={2}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder='What are you thinking?' />
-            {
-                selectedFiles &&
-                <div className={`max-h-[35vh] md:max-h-[40vh] overflow-y-scroll scrollbar-none w-full ${selectedFiles.length === 4 && 'grid grid-cols-2 gap-2'} ${selectedFiles.length === 2 && 'grid grid-cols-2 gap-2'} ${selectedFiles.length === 3 && 'grid grid-cols-2'} `}>
-                    {selectedFiles.map((file, index) => (
-                        <div key={index} className='relative mb-4'>
-                            <div className='absolute w-8 h-8 bg-[#78828e] bg-opacity-75 rounded-full flex items-center justify-center top-1 left-1 cursor-pointer' onClick={() => removeImage(index)}>
-                                <X />
+        <div className={`w-full border rounded-lg p-4 ${loading && 'pointer-events-none opacity-50'}`}>
+            <div className='max-h-[82vh] overflow-scroll scrollbar-none md:max-h-[85vh]'>
+                <textarea
+                    className='w-full border-none outline-none bg-transparent text-lg max-h-[30vh]'
+                    rows={2}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder='What are you thinking?' />
+                {
+                    selectedFiles &&
+                    <div className={`max-h-[35vh] md:max-h-[40vh] overflow-y-scroll scrollbar-none w-full ${selectedFiles.length === 4 && 'grid grid-cols-2 gap-2'} ${selectedFiles.length === 2 && 'grid grid-cols-2 gap-2'} ${selectedFiles.length === 3 && 'grid grid-cols-2'} `}>
+                        {selectedFiles.map((file, index) => (
+                            <div key={index} className='relative mb-4'>
+                                <div className='absolute w-8 h-8 bg-[#78828e] bg-opacity-75 rounded-full flex items-center justify-center top-1 left-1 cursor-pointer' onClick={() => removeImage(index)}>
+                                    <X />
+                                </div>
+                                <img
+                                    src={URL.createObjectURL(file)}
+                                    alt={`Selected File ${index}`}
+                                    className={`rounded-lg max-h-[200px] object-contain ${additionalClasses()}`}
+                                />
                             </div>
-                            <img
-                                src={URL.createObjectURL(file)}
-                                alt={`Selected File ${index}`}
-                                className={`rounded-lg max-h-[200px] object-contain ${additionalClasses()}`}
-                            />
-                        </div>
-                    ))}
-                </div>
-            }
+                        ))}
+                    </div>
+                }
+            </div>
             <div className='flex justify-between items-center border-t pt-2'>
                 <div className='flex items-center gap-3'>
                     <div className='flex gap-4 text-lg text-[#0381ec]'>
