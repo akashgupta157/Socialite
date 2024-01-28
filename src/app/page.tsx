@@ -4,14 +4,18 @@ import Sidebar from "@/components/Sidebar";
 import isAuth from "@/IsCompAuth";
 import Feed from "@/components/Feed";
 import { useSelector } from "react-redux";
+import PostBox from "@/components/PostBox";
+import Profile from "@/components/Profile";
 const Home = () => {
   const selected = useSelector((state: any) => state.selection.selected)
   return (
-    <main >
+    <main className="m-auto max-w-[1300px]">
       <Navbar />
       <div className="md:flex">
         <Sidebar />
         {selected === 'Home' && <Feed />}
+        {selected === 'AddPost' && <PostBox />}
+        {selected === 'Profile' && <Profile />}
       </div>
     </main>
   );

@@ -8,7 +8,7 @@ const Image = React.lazy(() => import('next/image'));
 export default function Navbar() {
     const user = useSelector((state: any) => state.user.user)
     return (
-        <nav className='sticky top-0 flex justify-between items-center border md:h-[10vh] h-[7vh] px-5 bg-white z-10'>
+        <nav className='sticky top-0 flex justify-between items-center border-b md:h-[10vh] h-[7vh] px-5 bg-white z-10'>
             <Image src={logo} alt="logo" priority className='w-[100px] md:w-[150px]' />
             <label htmlFor="search" className='hidden md:flex items-center gap-2 border border-gray-300 bg-gray-100 rounded-full w-[40%] px-3 py-2'>
                 <Search className='text-gray-500' />
