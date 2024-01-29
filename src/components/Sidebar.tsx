@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LOGOUT } from '@/redux/slices/userSlice';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-export default function Sidebar() {
+import isAuth from '@/IsCompAuth';
+const Sidebar = () => {
     const user = useSelector((state: any) => state.user.user)
     const dispatch = useDispatch()
     const router = useRouter()
@@ -35,3 +36,4 @@ export default function Sidebar() {
         </>
     )
 }
+export default isAuth(Sidebar);

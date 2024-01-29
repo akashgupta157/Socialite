@@ -10,7 +10,7 @@ export default function PostBox() {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [input, setInput] = useState('');
     const [isEmojiOpen, setEmojiOpen] = useState(false);
-    const token = useSelector((state: any) => state.user.user.token)
+    const token = useSelector((state: any) => state.user.user?.token)
     const config = configure(token)
     const addEmoji = (e: { unified: string }) => {
         const sym = e.unified.split("_");

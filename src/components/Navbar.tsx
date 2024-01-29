@@ -5,8 +5,9 @@ import userImage from '@/images/user.png'
 import help from '@/images/help.svg'
 import { Search, Bell, Menu } from 'lucide-react';
 import { useSelector } from 'react-redux';
+import isAuth from '@/IsCompAuth'
 const Image = React.lazy(() => import('next/image'));
-export default function Navbar() {
+const Navbar = () => {
     const user = useSelector((state: any) => state.user.user)
     return (
         <nav className='sticky top-0 flex justify-between items-center border-b md:h-[10vh] h-[7vh] px-5 bg-white z-10'>
@@ -30,3 +31,4 @@ export default function Navbar() {
         </nav>
     )
 }
+export default isAuth(Navbar);

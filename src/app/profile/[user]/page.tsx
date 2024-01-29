@@ -1,7 +1,9 @@
+'use client'
 import React from 'react'
-
-export default function Profile() {
+import isAuth from '@/IsCompAuth'
+const Profile = () => {
   return (
     <div>Profile</div>
   )
 }
+export default isAuth(Profile)
