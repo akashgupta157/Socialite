@@ -33,7 +33,7 @@ export default function Login() {
     if (data.success) {
       toast.success(data.message, {
         duration: 1500,
-        position: 'top-right',
+        position: 'top-center',
         style: {
           backgroundColor: "#17C60D",
           color: 'white'
@@ -46,12 +46,12 @@ export default function Login() {
       sessionStorage.setItem('user', JSON.stringify({ ...data.user, token: data.token }))
       dispatch(LOGIN({ ...data.user, token: data.token }))
       setTimeout(() => {
-        router.push('/')
+        router.push('/home')
       }, 1500);
     } else {
       toast.error(data.message, {
         duration: 2000,
-        position: 'top-right',
+        position: 'top-center',
         style: {
           backgroundColor: "#E03615",
           color: 'white'

@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import logo from '@/images/logo.png'
 import userImage from '@/images/user.png'
@@ -19,8 +20,8 @@ export default function Navbar() {
                 <Bell strokeWidth={'2px'} size={'35px'} className='border border-gray-300 rounded-full p-2 cursor-pointer' />
                 <div className='flex items-center gap-2'>
                     <div className='flex flex-col gap-0 items-end'>
-                        <p className='font-semibold'>{user.name}</p>
-                        <i className='text-gray-400 text-sm'>@{user.username}</i>
+                        <p className='font-semibold'>{user?.name}</p>
+                        <i className='text-gray-400 text-sm'>@{user?.username}</i>
                     </div>
                     <Image src={userImage} alt="user" priority className='w-[60px]' />
                 </div>
