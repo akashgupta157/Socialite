@@ -64,7 +64,7 @@ export default function Register() {
     }
     return (
         <>
-            <div className='flex h-[100vh] w-[100vw]'>
+            <div className='flex w-[100vw] md:h-[100vh] h-[90vh]'>
                 <div className='w-[50%] hidden md:flex justify-center items-center bg-blue-100'>
                     <Image src={registerImage} alt='registerImage' className='object-contain' priority />
                 </div>

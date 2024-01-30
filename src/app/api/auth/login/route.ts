@@ -32,3 +32,15 @@ export const POST = async (req: Request, res: Response) => {
     return NextResponse.json({ message: error.message, success: false });
   }
 };
+
+export const GET = async () => {
+  try {
+    await dbConnect();
+    // const user = await userModel.findOne({ username }).select("-password");
+    // if (!user) {
+    //   return NextResponse.json({ message: "User not found", success: false });
+    // }
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message, success: false });
+  }
+};

@@ -66,7 +66,7 @@ export default function Login() {
   return (
     <>
 
-      <div className='flex h-[100vh] w-[100vw]'>
+      <div className='flex md:h-[100vh] h-[90vh]'>
         <form onSubmit={handleSubmit(onSubmit)} className='gap-3 md:w-[50%] m-auto flex flex-col justify-center items-center'>
           <h1 className='text-3xl w-full font-medium max-w-xs pb-1 mb-2 border-b-2 border-blue-500'>Login</h1>
           <label className="form-control w-full max-w-xs" htmlFor='email'>

@@ -8,7 +8,7 @@ const user = mongoose.Schema(
     profilePicture: {
       type: String,
       default:
-        "https://res-console.cloudinary.com/dm5uvtj7t/media_explorer_thumbnails/929014564b8b03561ecf36c3ae6ecc31/detailed",
+        "https://res.cloudinary.com/dm5uvtj7t/image/upload/v1706622367/atwymgd8/exaerdufqcmkmwl9gll2.png",
     },
     bio: { type: String, default: "" },
     followers: [
@@ -29,7 +29,7 @@ const user = mongoose.Schema(
         ref: "Post",
       },
     ],
-    bookmarks: [
+    saved: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",

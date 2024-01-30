@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import logo from '@/images/logo.png'
-import userImage from '@/images/user.png'
 import help from '@/images/help.svg'
 import { Search, Bell, Menu } from 'lucide-react';
 import { useSelector } from 'react-redux';
@@ -19,12 +18,12 @@ const Navbar = () => {
             <div className='hidden md:flex items-center gap-4'>
                 <Image src={help} alt="help" priority className='w-[35px] border border-gray-300 rounded-full p-2 cursor-pointer' />
                 <Bell strokeWidth={'2px'} size={'35px'} className='border border-gray-300 rounded-full p-2 cursor-pointer' />
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-3'>
                     <div className='flex flex-col gap-0 items-end'>
                         <p className='font-semibold'>{user?.name}</p>
                         <i className='text-gray-400 text-sm'>@{user?.username}</i>
                     </div>
-                    <Image src={userImage} alt="user" priority className='w-[60px]' />
+                    <Image src={user?.profilePicture} alt="user" width={50} height={50} priority className='rounded-full' />
                 </div>
             </div>
             <Menu className='md:hidden' />
