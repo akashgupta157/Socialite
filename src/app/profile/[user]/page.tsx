@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { formatNumber } from '@/components/misc'
 interface UserDetails {
   followers: any
   following: any
@@ -49,20 +50,26 @@ const Profile = () => {
   }, []);
   return (
     <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[80%]'>
-      <nav className='flex border-b w-[90%] m-auto py-4 px-20 gap-20'>
-        {userDetails && <Image src={userDetails.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full md:w-36 w-20 h-auto" />}
-        <div>
-          <div>
+      <nav className='md:hidden'>
+        <div className='flex justify-between items-center gap-3 p-3'>
+          <div className='flex items-center gap-3'>
+            {userDetails && <Image src={userDetails.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-20" />}
             <div>
-              <h1>{userDetails && userDetails.name}</h1>
-              <p>{userDetails && userDetails.username}</p>
+              <h1 className='text-xl font-semibold'>{userDetails && userDetails.name}</h1>
+              <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
             </div>
-            <div>
-              <p>{userDetails && userDetails.posts.length} posts</p>
-              <p>{userDetails && userDetails.followers.length} followers</p>
-              <p>{userDetails && userDetails.following.length} following</p>
-            </div>
-            {self && <button className='rounded-badge capitalize '>edit profile</button>}
+          </div>
+          <button className='bg-[#9d9290] text-white font-semibold px-3 py-1 rounded-lg'>{self ? 'Edit Profile' : 'Follow'}</button>
+        </div>
+        <div className='border flex justify-evenly items-center mt-1 mb-1'>
+          <div className='flex flex-col items-center'>
+            {userDetails && <><h1 className='font-bold'>{formatNumber(userDetails.posts.length)}</h1><p>posts</p></>}
+          </div>
+          <div className='flex flex-col items-center'>
+            {userDetails && <><h1 className='font-bold'>{formatNumber(userDetails.followers.length)}</h1><p>followers</p></>}
+          </div>
+          <div className='flex flex-col items-center'>
+            {userDetails && <><h1 className='font-bold'>{formatNumber(userDetails.following.length)}</h1><p>following</p></>}
           </div>
         </div>
       </nav>
