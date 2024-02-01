@@ -8,6 +8,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { formatNumber } from '@/components/misc'
 interface UserDetails {
+  bio: string
   followers: any
   following: any
   posts: any
@@ -70,6 +71,28 @@ const Profile = () => {
           </div>
           <div className='flex flex-col items-center'>
             {userDetails && <><h1 className='font-bold'>{formatNumber(userDetails.following.length)}</h1><p>following</p></>}
+          </div>
+        </div>
+      </nav>
+      <nav className='hidden md:flex w-[85%] border-b m-auto justify-between items-center py-4 px-5'>
+        <div className='flex justify-between items-center gap-10'>
+          {userDetails && <Image src={userDetails.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-36" />}
+          <div className='flex flex-col gap-2'>
+            <div className='flex items-center gap-16'>
+              <div>
+                <h1 className='text-xl font-semibold'>{userDetails && userDetails.name}</h1>
+                <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
+              </div>
+              {
+                self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
+              }
+            </div>
+            <div className='flex items-center gap-5'>
+              {userDetails && <h1 className='font-bold'>{formatNumber(userDetails.posts.length)} posts</h1>}
+              {userDetails && <h1 className='font-bold'>{formatNumber(userDetails.followers.length)} followers</h1>}
+              {userDetails && <h1 className='font-bold'>{formatNumber(userDetails.following.length)} following</h1>}
+            </div>
+            <p>{userDetails && userDetails.bio}</p>
           </div>
         </div>
       </nav>
