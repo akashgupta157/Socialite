@@ -80,7 +80,7 @@ export default function PostBox() {
         <div className={`w-full border rounded-lg p-4 ${loading && 'pointer-events-none opacity-50'}`}>
             <div className='max-h-[82vh] overflow-scroll scrollbar-none md:max-h-[85vh]'>
                 <textarea
-                    className='w-full border-none outline-none bg-transparent text-lg max-h-[30vh]'
+                    className='w-full border-transparent focus:border-transparent focus:ring-0 bg-transparent text-lg max-h-[30vh]'
                     rows={2}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}

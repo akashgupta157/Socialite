@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { LOGIN } from '@/redux/slices/userSlice';
 import toast from 'react-hot-toast';
 const Image = React.lazy(() => import('next/image'));
+import { Spinner } from 'flowbite-react';
 interface UserInput {
     name: string;
     email: string;
@@ -17,7 +18,7 @@ interface UserInput {
 }
 export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const router = useRouter()
     const {
         register,
@@ -70,12 +71,12 @@ export default function Register() {
                     <h1 className='text-3xl w-full font-medium max-w-xs pb-1 mb-2 border-b-2 border-blue-500'>Registration</h1>
                     <label className="form-control w-full max-w-xs" htmlFor='name'>
                         <p className={`${errors.name && 'text-red-700'}`}>Name :</p>
-                        <div className={`flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.name && 'border-red-700 focus-within:border-red-700'}`}>
+                        <div className={`flex items-center border rounded-md px-3 py-1 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.name && 'border-red-700 focus-within:border-red-700'}`}>
                             <User />
                             <input
                                 type="text"
                                 id="name"
-                                className='border-0 outline-none w-full'
+                                className='w-full border-transparent focus:border-transparent focus:ring-0'
                                 {...register("name", {
                                     required: "Name is required",
                                     minLength: {
@@ -98,12 +99,12 @@ export default function Register() {
                     </label>
                     <label className="form-control w-full max-w-xs" htmlFor='email'>
                         <p className={`${errors.email && 'text-red-700'}`}>Email :</p>
-                        <div className={`flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.email && 'border-red-700 focus-within:border-red-700'}`}>
+                        <div className={`flex items-center border rounded-md px-3 py-1 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.email && 'border-red-700 focus-within:border-red-700'}`}>
                             <AtSign />
                             <input
                                 type="text"
                                 id="email"
-                                className='border-0 outline-none w-full'
+                                className='w-full border-transparent focus:border-transparent focus:ring-0'
                                 {...register("email", {
                                     required: "Email is required",
                                     pattern: {
@@ -122,12 +123,12 @@ export default function Register() {
                     </label>
                     <label className="form-control w-full max-w-xs" htmlFor='password'>
                         <p className={`${errors.password && 'text-red-700'}`}>Password :</p>
-                        <div className={`flex items-center gap-2 border rounded-md p-3 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.password && 'border-red-700 focus-within:border-red-700'}`}>
+                        <div className={`flex items-center border rounded-md px-3 py-1 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${errors.password && 'border-red-700 focus-within:border-red-700'}`}>
                             <LockKeyhole />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 id="password"
-                                className='border-0 outline-none w-full'
+                                className='w-full border-transparent focus:border-transparent focus:ring-0'
                                 {...register("password", {
                                     required: "Password is required",
                                     minLength: {
@@ -152,12 +153,15 @@ export default function Register() {
                         )}
                     </label>
                     <button
-                        className="btn px-16 bg-blue-500 text-white hover:bg-blue-600"
+                        className={`${loading ? 'cursor-not-allowed bg-blue-400' : 'cursor-pointer bg-blue-500 hover:bg-blue-600'} w-40 py-3 rounded-md text-white`}
                         type="submit"
                         disabled={loading}
                     >
                         {loading ? (
-                            <span className="loading loading-dots loading-lg bg-blue-500"></span>
+                            <>
+                                <Spinner color="info" aria-label="Info spinner example" size={'sm'} className='mr-3' />
+                                <span>Loading...</span>
+                            </>
                         ) : (
                             'Submit'
                         )}

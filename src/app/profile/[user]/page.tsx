@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { formatNumber } from '@/components/misc'
+import { Spinner } from 'flowbite-react'
 interface UserDetails {
   bio: string
   followers: any
@@ -21,7 +22,7 @@ const Profile = () => {
   const pathname = usePathname()
   const username = pathname?.split('/').pop()
   const user = useSelector((state: any) => state.user.user)
-  const [self, setSelf] = useState(false);
+  const [self, setSelf] = useState(true);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const fetchUserDetails = async () => {
@@ -56,7 +57,8 @@ const Profile = () => {
     <>
       {
         loading ?
-          <div className='w-screen flex justify-center items-center'><span className="loading loading-spinner loading-lg text-[#0381ec]"></span>
+          <div className='md:w-[80%] flex justify-center items-center'>
+            <Spinner aria-label="Extra large spinner example" size="xl" />
           </div>
           :
           <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[80%]'>
