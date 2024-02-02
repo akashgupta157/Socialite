@@ -61,7 +61,7 @@ const Profile = () => {
           :
           <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[80%]'>
             <nav className='md:hidden'>
-              <div className='flex justify-between items-center gap-3 p-3'>
+              <div className='flex justify-between items-center p-3'>
                 <div className='flex items-center gap-3'>
                   {userDetails && <Image src={userDetails.profilePicture} loading='lazy' alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-20" />}
                   <div>
@@ -69,8 +69,11 @@ const Profile = () => {
                     <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
                   </div>
                 </div>
-                <button className='bg-[#9d9290] text-white font-semibold px-3 py-1 rounded-lg'>{self ? 'Edit Profile' : 'Follow'}</button>
+                {
+                  self ? <button className='bg-[#9d9290] text-white font-semibold px-2 py-1 rounded-lg'>Edit Profile</button> : <button className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
+                }
               </div>
+              <p>{userDetails && userDetails.bio}</p>
               <div className='border flex justify-evenly items-center mt-1 mb-1'>
                 <div className='flex flex-col items-center'>
                   {userDetails && <><h1 className='font-bold'>{formatNumber(userDetails.posts.length)}</h1><p>posts</p></>}

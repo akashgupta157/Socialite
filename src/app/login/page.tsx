@@ -45,9 +45,7 @@ export default function Login() {
       })
       sessionStorage.setItem('user', JSON.stringify({ ...data.user, token: data.token }))
       dispatch(LOGIN({ ...data.user, token: data.token }))
-      setTimeout(() => {
-        router.push('/home')
-      }, 1500);
+      router.push('/home')
     } else {
       toast.error(data.message, {
         duration: 2000,
