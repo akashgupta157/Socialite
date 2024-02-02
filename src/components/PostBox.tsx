@@ -55,7 +55,7 @@ export default function PostBox() {
                 content: input,
                 attachments: attachments.length > 0 ? attachments : undefined,
             };
-            await axios.post('/api/post/addpost', postData, config);
+            await axios.post('/api/post/addposts', postData, config);
             setInput('');
             setSelectedFiles([]);
         } catch (error) {

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { formatNumber } from '@/components/misc'
+import { configure, formatNumber } from '@/components/misc'
 import { Spinner } from 'flowbite-react'
 interface UserDetails {
   bio: string
@@ -25,9 +25,10 @@ const Profile = () => {
   const [self, setSelf] = useState(true);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(false);
+  const config = configure(user.token)
   const fetchUserDetails = async () => {
     setLoading(true)
-    const { data } = await axios.get(`/api/auth/${username}`)
+    const { data } = await axios.get(`/api/post/${username}`)
     if (data.success) {
       setUserDetails(data.user)
     } else {
@@ -52,7 +53,11 @@ const Profile = () => {
       setSelf(true)
     }
     fetchUserDetails()
-  }, []);
+  }, [username, user]);
+  const handleFollow = async () => {
+    const { data } = await axios.post(`/api/post/${username}`, { username }, config)
+    console.log(data)
+  }
   return (
     <>
       {
@@ -72,7 +77,7 @@ const Profile = () => {
                   </div>
                 </div>
                 {
-                  self ? <button className='bg-[#9d9290] text-white font-semibold px-2 py-1 rounded-lg'>Edit Profile</button> : <button className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
+                  self ? <button onClick={handleFollow} className='bg-[#9d9290] text-white font-semibold px-2 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
                 }
               </div>
               <p>{userDetails && userDetails.bio}</p>
@@ -98,7 +103,7 @@ const Profile = () => {
                       <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
                     </div>
                     {
-                      self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
+                      self ? <button onClick={handleFollow} className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
                     }
                   </div>
                   <div className='flex items-center gap-5'>
