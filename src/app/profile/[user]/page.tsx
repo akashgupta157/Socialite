@@ -7,7 +7,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { configure, formatNumber } from '@/components/misc'
-import { Spinner } from 'flowbite-react'
+import { Spinner, Modal, Button, FloatingLabel } from 'flowbite-react'
+import { Camera } from 'lucide-react'
 interface UserDetails {
   bio: string
   followers: any
@@ -27,6 +28,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [isFollowing, setIsFollowing] = useState(true);
   const [currentTab, setCurrentTab] = useState('posts');
+  const [openModal, setOpenModal] = useState(false);
   const config = configure(user.token)
   const fetchUserDetails = async () => {
     setLoading(true)
@@ -91,7 +93,7 @@ const Profile = () => {
                   </div>
                 </div>
                 {
-                  self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className={`${isFollowing ? 'bg-[#9d9290]' : 'bg-[#0381ec]'}  text-white font-semibold px-5 py-1 rounded-lg`}>{isFollowing ? 'Following' : 'Follow'}</button>
+                  self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg' onClick={() => setOpenModal(true)}>Edit Profile</button> : <button onClick={handleFollow} className={`${isFollowing ? 'bg-[#9d9290]' : 'bg-[#0381ec]'}  text-white font-semibold px-5 py-1 rounded-lg`}>{isFollowing ? 'Following' : 'Follow'}</button>
                 }
               </div>
               <p>{userDetails && userDetails.bio}</p>
@@ -118,7 +120,7 @@ const Profile = () => {
                       <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
                     </div>
                     {
-                      self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className={`${isFollowing ? 'bg-[#9d9290]' : 'bg-[#0381ec]'}  text-white font-semibold px-5 py-1 rounded-lg`}>{isFollowing ? 'Following' : 'Follow'}</button>
+                      self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg' onClick={() => setOpenModal(true)}>Edit Profile</button> : <button onClick={handleFollow} className={`${isFollowing ? 'bg-[#9d9290]' : 'bg-[#0381ec]'}  text-white font-semibold px-5 py-1 rounded-lg`}>{isFollowing ? 'Following' : 'Follow'}</button>
                     }
                   </div>
                   <div className='flex items-center gap-5'>
@@ -136,6 +138,28 @@ const Profile = () => {
             </div>
           </div>
       }
+      <Modal show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header>Edit Profile</Modal.Header>
+        <Modal.Body>
+          <div className='relative max-w-fit mb-2'>
+            <Image src={user.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-28" />
+            <div className='absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-white cursor-pointer bg-black p-3 rounded-full bg-opacity-[0.5] hover:bg-opacity-[0.4]' >
+              <Camera />
+            </div>
+          </div>
+          <FloatingLabel variant="outlined" label="Name" value={user.name} />
+          <div className="relative mt-2">
+            <textarea id="floating_outlined" className="block px-2.5 pb-2.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value={user.bio} maxLength={150} />
+            <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale- top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Bio</label>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setOpenModal(false)}>Save</Button>
+          <Button color="gray" onClick={() => setOpenModal(false)}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }
