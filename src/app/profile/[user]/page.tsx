@@ -26,6 +26,7 @@ const Profile = () => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [isFollowing, setIsFollowing] = useState(true);
+  const [currentTab, setCurrentTab] = useState('posts');
   const config = configure(user.token)
   const fetchUserDetails = async () => {
     setLoading(true)
@@ -99,7 +100,7 @@ const Profile = () => {
                 }
               </div>
               <p>{userDetails && userDetails.bio}</p>
-              <div className='border flex justify-evenly items-center mt-1 mb-1'>
+              <div className='border flex justify-evenly items-center mt-1'>
                 <div className='flex flex-col items-center'>
                   {userDetails && <><h1 className='font-bold'>{formatNumber(userDetails.posts.length)}</h1><p>posts</p></>}
                 </div>
@@ -134,6 +135,10 @@ const Profile = () => {
                 </div>
               </div>
             </nav>
+            <div className='flex justify-evenly items-center'>
+              <button className={`px-2 text-lg ${currentTab === 'posts' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('posts')}>Posts</button>
+              <button className={`px-2 text-lg ${currentTab === 'likes' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('likes')}>Likes</button>
+            </div>
           </div>
       }
     </>
