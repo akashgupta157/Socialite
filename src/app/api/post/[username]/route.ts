@@ -12,7 +12,9 @@ export async function GET(
     const user = await userModel
       .findOne({ username: params.username })
       .select("-password")
-      .populate("posts");
+      .populate("posts")
+      .populate("following")
+      .populate("followers");
     if (!user) {
       return NextResponse.json({ message: "User not found", success: false });
     }

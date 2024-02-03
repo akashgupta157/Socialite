@@ -8,7 +8,6 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { configure, formatNumber } from '@/components/misc'
 import { Spinner } from 'flowbite-react'
-import { useMediaQuery } from 'react-responsive';
 interface UserDetails {
   bio: string
   followers: any
@@ -26,8 +25,8 @@ const Profile = () => {
   const [self, setSelf] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(true);
   const config = configure(user.token)
-  const isMobile = useMediaQuery({ query: `(max-width: 767px)` });
   const fetchUserDetails = async () => {
     setLoading(true)
     const { data } = await axios.get(`/api/post/${username}`)
@@ -55,9 +54,26 @@ const Profile = () => {
     if (user.username === username) {
       setSelf(true)
     }
-  }, [username, user]);
+  }, []);
+  useEffect(() => {
+    const isUserFollowed = userDetails?.followers.some((follower: { _id: any }) => follower._id === user._id);
+    setIsFollowing(isUserFollowed)
+  }, [userDetails]);
   const handleFollow = async () => {
-    const { data } = await axios.post(`/api/post/${username}`, { username }, config)
+    if (isFollowing) {
+      let updatedFollowers = userDetails?.followers.filter(
+        (userId: { toString: () => any }) =>
+          userId.toString() !== user._id.toString()
+      );
+      if (userDetails) {
+        const updatedUserDetails = { ...userDetails, followers: updatedFollowers }
+        setUserDetails(updatedUserDetails)
+      }
+    } else {
+      userDetails?.followers.push(user._id)
+    }
+    setIsFollowing(!isFollowing)
+    await axios.post(`/api/post/${username}`, { username }, config)
   }
   return (
     <>
@@ -79,7 +95,7 @@ const Profile = () => {
                   </div>
                 </div>
                 {
-                  self ? <button className='bg-[#9d9290] text-white font-semibold px-2 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
+                  self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className={`${isFollowing ? 'bg-[#9d9290]' : 'bg-[#0381ec]'}  text-white font-semibold px-5 py-1 rounded-lg`}>{isFollowing ? 'Following' : 'Follow'}</button>
                 }
               </div>
               <p>{userDetails && userDetails.bio}</p>
@@ -106,7 +122,7 @@ const Profile = () => {
                       <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
                     </div>
                     {
-                      self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
+                      self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className={`${isFollowing ? 'bg-[#9d9290]' : 'bg-[#0381ec]'}  text-white font-semibold px-5 py-1 rounded-lg`}>{isFollowing ? 'Following' : 'Follow'}</button>
                     }
                   </div>
                   <div className='flex items-center gap-5'>
