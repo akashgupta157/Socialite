@@ -62,13 +62,8 @@ const Profile = () => {
   }, [userDetails]);
   const handleFollow = async () => {
     if (isFollowing) {
-      let updatedFollowers = userDetails?.followers.filter(
-        (userId: { toString: () => any }) =>
-          userId.toString() !== user._id.toString()
-      );
       if (userDetails) {
-        const updatedUserDetails = { ...userDetails, followers: updatedFollowers }
-        setUserDetails(updatedUserDetails)
+        userDetails.followers = userDetails?.followers.filter((follower: { _id: any }) => follower._id !== user._id)
       }
     } else {
       userDetails?.followers.push(user._id)

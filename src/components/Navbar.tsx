@@ -17,22 +17,18 @@ const Navbar = () => {
     const router = useRouter()
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState<any[]>([]);
-    const [searchLoading, setSearchLoading] = useState(false);
+    const fetchResults = async () => {
+        try {
+            const { data } = await axios.get(
+                `api/user/search?search=${search}`,
+                config
+            );
+            setSearchResults(data.users);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
     useEffect(() => {
-        const fetchResults = async () => {
-            try {
-                setSearchLoading(true);
-                const { data } = await axios.get(
-                    `api/user/search?search=${search}`,
-                    config
-                );
-                setSearchResults(data.users);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setSearchLoading(false);
-            }
-        };
         const debounceTimer = setTimeout(() => {
             if (search?.length > 0) {
                 fetchResults();
@@ -50,7 +46,7 @@ const Navbar = () => {
                 <input type="text" autoComplete='off' placeholder="Search now..." onChange={(e) => setSearch(e.target.value)} id='search' className='w-full bg-transparent border-transparent focus:border-transparent focus:ring-0' />
             </label>
             {
-                searchResults.length > 0 &&
+                searchResults?.length > 0 &&
                 <div className='absolute top-[8.5vh] bg-white left-[30%] w-[250px] max-h-[200px] overflow-y-scroll scrollbar-none py-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded'>
                     {
                         searchResults.map((e, i) => (
