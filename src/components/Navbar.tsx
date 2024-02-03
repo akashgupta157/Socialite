@@ -17,7 +17,6 @@ const Navbar = () => {
     const router = useRouter()
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState<any[]>([]);
-    console.log(search)
     const [searchLoading, setSearchLoading] = useState(false);
     useEffect(() => {
         const fetchResults = async () => {
