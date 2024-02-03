@@ -30,10 +30,42 @@ export async function POST(
     const headersInstance = headers();
     const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
     const payload = jwt.decode(BearerToken) as JwtPayload;
+    const currentUser = await userModel.findOne({ username: payload.username });
+    const targetUser = await userModel.findOne({ username: params.username });
+    if (!currentUser || !targetUser) {
+      return NextResponse.json({ message: "User not found", success: false });
+    }
     if (payload.username === params.username) {
-      return NextResponse.json({ message: "matched", success: true });
+      return NextResponse.json({
+        message: "Cannot follow/unfollow yourself",
+        success: false,
+      });
+    }
+    const isFollowing = currentUser.following.includes(targetUser._id);
+    if (isFollowing) {
+      currentUser.following = currentUser.following.filter(
+        (userId: { toString: () => any }) =>
+          userId.toString() !== targetUser._id.toString()
+      );
+      targetUser.followers = targetUser.followers.filter(
+        (userId: { toString: () => any }) =>
+          userId.toString() !== currentUser._id.toString()
+      );
+      await currentUser.save();
+      await targetUser.save();
+      return NextResponse.json({
+        message: "Unfollowed successfully",
+        success: true,
+      });
     } else {
-      return NextResponse.json({ message: "not matched", success: true });
+      currentUser.following.push(targetUser._id);
+      targetUser.followers.push(currentUser._id);
+      await currentUser.save();
+      await targetUser.save();
+      return NextResponse.json({
+        message: "Followed successfully",
+        success: true,
+      });
     }
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });

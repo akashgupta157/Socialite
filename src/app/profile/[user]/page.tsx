@@ -8,6 +8,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { configure, formatNumber } from '@/components/misc'
 import { Spinner } from 'flowbite-react'
+import { useMediaQuery } from 'react-responsive';
 interface UserDetails {
   bio: string
   followers: any
@@ -22,10 +23,11 @@ const Profile = () => {
   const pathname = usePathname()
   const username = pathname?.split('/').pop()
   const user = useSelector((state: any) => state.user.user)
-  const [self, setSelf] = useState(true);
+  const [self, setSelf] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const config = configure(user.token)
+  const isMobile = useMediaQuery({ query: `(max-width: 767px)` });
   const fetchUserDetails = async () => {
     setLoading(true)
     const { data } = await axios.get(`/api/post/${username}`)
@@ -49,24 +51,24 @@ const Profile = () => {
     setLoading(false)
   }
   useEffect(() => {
+    fetchUserDetails()
     if (user.username === username) {
       setSelf(true)
     }
-    fetchUserDetails()
   }, [username, user]);
   const handleFollow = async () => {
     const { data } = await axios.post(`/api/post/${username}`, { username }, config)
-    console.log(data)
   }
   return (
     <>
       {
         loading ?
-          <div className='md:w-[80%] flex justify-center items-center'>
+          <div className='md:w-[80%] flex justify-center items-center md:mt-0 mt-48'>
             <Spinner aria-label="Extra large spinner example" size="xl" />
           </div>
           :
           <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[80%]'>
+            {/* mobile */}
             <nav className='md:hidden'>
               <div className='flex justify-between items-center p-3'>
                 <div className='flex items-center gap-3'>
@@ -77,7 +79,7 @@ const Profile = () => {
                   </div>
                 </div>
                 {
-                  self ? <button onClick={handleFollow} className='bg-[#9d9290] text-white font-semibold px-2 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
+                  self ? <button className='bg-[#9d9290] text-white font-semibold px-2 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
                 }
               </div>
               <p>{userDetails && userDetails.bio}</p>
@@ -93,6 +95,7 @@ const Profile = () => {
                 </div>
               </div>
             </nav>
+            {/* laptop */}
             <nav className='hidden md:flex w-[85%] border-b m-auto justify-between items-center py-4 px-5'>
               <div className='flex justify-between items-center gap-10'>
                 {userDetails && <Image src={userDetails.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-36" />}
@@ -103,7 +106,7 @@ const Profile = () => {
                       <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
                     </div>
                     {
-                      self ? <button onClick={handleFollow} className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
+                      self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg'>Edit Profile</button> : <button onClick={handleFollow} className='bg-[#0381ec] text-white font-semibold px-5 py-1 rounded-lg'>Follow</button>
                     }
                   </div>
                   <div className='flex items-center gap-5'>
