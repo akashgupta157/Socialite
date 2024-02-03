@@ -30,7 +30,7 @@ const Profile = () => {
   const config = configure(user.token)
   const fetchUserDetails = async () => {
     setLoading(true)
-    const { data } = await axios.get(`/api/post/${username}`)
+    const { data } = await axios.get(`/api/user/${username}`)
     if (data.success) {
       setUserDetails(data.user)
     } else {
@@ -74,7 +74,7 @@ const Profile = () => {
       userDetails?.followers.push(user._id)
     }
     setIsFollowing(!isFollowing)
-    await axios.post(`/api/post/${username}`, { username }, config)
+    await axios.post(`/api/user/${username}`, { username }, config)
   }
   return (
     <>
@@ -136,8 +136,8 @@ const Profile = () => {
               </div>
             </nav>
             <div className='flex justify-evenly items-center'>
-              <button className={`px-2 text-lg ${currentTab === 'posts' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('posts')}>Posts</button>
-              <button className={`px-2 text-lg ${currentTab === 'likes' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('likes')}>Likes</button>
+              <button className={`px-2 md:text-lg ${currentTab === 'posts' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('posts')}>Posts</button>
+              <button className={`px-2 md:text-lg ${currentTab === 'likes' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('likes')}>Likes</button>
             </div>
           </div>
       }

@@ -1,14 +1,17 @@
 import dbConnect from "@/db";
 import userModel from "@/models/user.model";
+import postModel from "@/models/post.model";
 import { headers } from "next/headers";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 export async function GET(
   request: NextRequest,
   { params }: { params: { username: string } }
 ) {
   try {
     await dbConnect();
+    const Post = mongoose.models.Post || mongoose.model("Post", postModel);
     const user = await userModel
       .findOne({ username: params.username })
       .select("-password")
