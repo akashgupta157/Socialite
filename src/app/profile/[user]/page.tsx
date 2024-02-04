@@ -113,7 +113,7 @@ const Profile = () => {
             <nav className='md:hidden'>
               <div className='flex justify-between items-center p-3'>
                 <div className='flex items-center gap-3'>
-                  {userDetails && <Image src={userDetails.profilePicture} loading='lazy' alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-20" />}
+                  {userDetails && <Image src={userDetails.profilePicture} loading='lazy' alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-20 h-20 object-contain" />}
                   <div>
                     <h1 className='text-xl font-semibold'>{userDetails && userDetails.name}</h1>
                     <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
@@ -139,7 +139,7 @@ const Profile = () => {
             {/* laptop */}
             <nav className='hidden md:flex w-[85%] border-b m-auto justify-between items-center py-4 px-5'>
               <div className='flex justify-between items-center gap-10'>
-                {userDetails && <Image src={userDetails.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-36" />}
+                {userDetails && <Image src={userDetails.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-36 h-36 object-contain" />}
                 <div className='flex flex-col gap-2'>
                   <div className='flex items-center gap-16'>
                     <div>

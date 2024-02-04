@@ -75,7 +75,7 @@ const Navbar = () => {
                         <p className='font-semibold'>{user?.name}</p>
                         <i className='text-gray-400 text-sm'>@{user?.username}</i>
                     </div>
-                    <Image src={user?.profilePicture} alt="user" width={50} height={50} priority className='rounded-full' />
+                    <Image src={user?.profilePicture} alt="user" width={50} height={50} priority className='rounded-full object-contain' />
                 </div>
             </div>
             <Menu className='md:hidden' />
