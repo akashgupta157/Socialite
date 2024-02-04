@@ -1,14 +1,15 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import isAuth from '@/IsCompAuth'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { configure, formatNumber } from '@/components/misc'
+import { configure, formatNumber, uploadCloudinary } from '@/components/misc'
 import { Spinner, Modal, Button, FloatingLabel } from 'flowbite-react'
 import { Camera } from 'lucide-react'
+import { LOGIN } from '@/redux/slices/userSlice'
 interface UserDetails {
   bio: string
   followers: any
@@ -21,6 +22,7 @@ interface UserDetails {
 const Profile = () => {
   const router = useRouter()
   const pathname = usePathname()
+  const dispatch = useDispatch()
   const username = pathname?.split('/').pop()
   const user = useSelector((state: any) => state.user.user)
   const [self, setSelf] = useState(false);
@@ -29,6 +31,12 @@ const Profile = () => {
   const [isFollowing, setIsFollowing] = useState(true);
   const [currentTab, setCurrentTab] = useState('posts');
   const [openModal, setOpenModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState();
+  const [updateProfile, setUpdateProfile] = useState({
+    profilePicture: user.profilePicture,
+    name: user.name,
+    bio: user.bio
+  });
   const config = configure(user.token)
   const fetchUserDetails = async () => {
     setLoading(true)
@@ -73,6 +81,25 @@ const Profile = () => {
     setIsFollowing(!isFollowing)
     await axios.post(`/api/user/${username}`, { username }, config)
   }
+  const handleFileChange = (e: any) => {
+    setSelectedFile(e.target.files[0]);
+    setUpdateProfile({ ...updateProfile, profilePicture: URL.createObjectURL(e.target.files[0]) })
+  };
+  const handleUpdateProfile = async () => {
+    try {
+      if (selectedFile) {
+        const { url } = await uploadCloudinary(selectedFile);
+        updateProfile.profilePicture = url;
+      }
+      const { data } = await axios.patch('/api/user/profile', { ...updateProfile }, config);
+      setUserDetails(data.user)
+      sessionStorage.setItem('user', JSON.stringify({ ...data.user, token: user.token }))
+      dispatch(LOGIN({ ...data.user, token: user.token }))
+      setOpenModal(false)
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
   return (
     <>
       {
@@ -142,19 +169,20 @@ const Profile = () => {
         <Modal.Header>Edit Profile</Modal.Header>
         <Modal.Body>
           <div className='relative max-w-fit mb-2'>
-            <Image src={user.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-28" />
-            <div className='absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-white cursor-pointer bg-black p-3 rounded-full bg-opacity-[0.5] hover:bg-opacity-[0.4]' >
+            <Image src={updateProfile.profilePicture} alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-28 h-28 object-contain border" />
+            <label htmlFor="file" className='absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-white cursor-pointer bg-black p-3 rounded-full bg-opacity-[0.5] hover:bg-opacity-[0.4]' >
               <Camera />
-            </div>
+            </label>
+            <input type="file" name="" id="file" accept="image/*" hidden onChange={handleFileChange} />
           </div>
-          <FloatingLabel variant="outlined" label="Name" value={user.name} />
+          <FloatingLabel variant="outlined" label="Name" value={updateProfile.name} onChange={(e) => setUpdateProfile({ ...updateProfile, name: e.target.value })} />
           <div className="relative mt-2">
-            <textarea id="floating_outlined" className="block px-2.5 pb-2.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value={user.bio} maxLength={150} />
-            <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale- top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Bio</label>
+            <textarea id="floating_outlined" className="block px-2.5 pb-2.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value={updateProfile.bio} maxLength={150} onChange={(e) => setUpdateProfile({ ...updateProfile, bio: e.target.value })} />
+            <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Bio</label>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => setOpenModal(false)}>Save</Button>
+          <Button onClick={handleUpdateProfile}>Save</Button>
           <Button color="gray" onClick={() => setOpenModal(false)}>
             Cancel
           </Button>
