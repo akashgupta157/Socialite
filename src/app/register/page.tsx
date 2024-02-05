@@ -18,7 +18,7 @@ interface UserInput {
 }
 export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const router = useRouter()
     const {
         register,

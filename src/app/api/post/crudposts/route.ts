@@ -11,10 +11,13 @@ export const POST = async (req: NextRequest) => {
     const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
     const payload = jwt.decode(BearerToken) as JwtPayload;
     const { content, attachments } = await req.json();
+    const hashtagRegex = /#\w+/g;
+    const hashtagsArray = content.match(hashtagRegex);
     const newPost = new postModel({
       user: payload.userId,
       content,
       attachments,
+      hashtags: hashtagsArray,
     });
     await newPost.save();
     const user = await userModel.findById(payload.userId);
@@ -28,3 +31,23 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ message: error.message, success: false });
   }
 };
+
+export async function GET(request: NextRequest) {
+  try {
+    await dbConnect();
+    const headersInstance = headers();
+    const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
+    const payload = jwt.decode(BearerToken) as JwtPayload;
+    const user = await userModel.findOne({ username: payload.username });
+    if (!user) {
+      return NextResponse.json({ message: "User not found", success: false });
+    }
+    const posts = await postModel
+      .find({ user: { $in: [...user.following, user._id] } })
+      .populate("user", "profilePicture name username")
+      .sort({ updatedAt: -1 });
+    return NextResponse.json({ posts });
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message, success: false });
+  }
+}

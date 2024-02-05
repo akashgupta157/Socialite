@@ -55,7 +55,7 @@ export default function PostBox() {
                 content: input,
                 attachments: attachments.length > 0 ? attachments : undefined,
             };
-            await axios.post('/api/post/addposts', postData, config);
+            await axios.post('/api/post/crudposts', postData, config);
             setInput('');
             setSelectedFiles([]);
         } catch (error) {
@@ -76,13 +76,15 @@ export default function PostBox() {
                 return '';
         }
     };
+
     return (
         <div className={`w-full border rounded-lg p-4 ${loading && 'pointer-events-none opacity-50'}`}>
             <div className='max-h-[82vh] overflow-scroll scrollbar-none md:max-h-[85vh]'>
                 <textarea
-                    className='w-full border-transparent focus:border-transparent focus:ring-0 bg-transparent text-lg max-h-[30vh]'
-                    rows={2}
+                    className='border-0 resize-none w-full p-0 focus:ring-0 bg-transparent text-lg min-h-[10vh] max-h-[30vh]'
+                    rows={Math.min(10, input.split('\n').length)}
                     value={input}
+                    maxLength={280}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder='What are you thinking?' />
                 {
@@ -120,7 +122,7 @@ export default function PostBox() {
                         )}
                     </div>
                 </div>
-                <button onClick={handlePost} className="bg-[#0381ec] text-white rounded-full py-2 px-4 text-sm font-bold">Post Now</button>
+                <button onClick={handlePost} className={`${input.length === 0 ? 'bg-[#4999df] cursor-not-allowed' : "bg-[#0381ec]"} text-white rounded-full py-2 px-4 text-sm font-bold`}>Post Now</button>
             </div>
         </div>
     );

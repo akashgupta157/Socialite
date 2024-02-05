@@ -111,19 +111,19 @@ const Profile = () => {
           <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[80%]'>
             {/* mobile */}
             <nav className='md:hidden'>
-              <div className='flex justify-between items-center p-3'>
+              <div className='flex justify-between items-center px-3 py-2'>
                 <div className='flex items-center gap-3'>
-                  {userDetails && <Image src={userDetails.profilePicture} loading='lazy' alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-20 h-20 object-contain" />}
+                  {userDetails && <Image src={userDetails.profilePicture} loading='lazy' alt={'profilePicture'} width="0" height="0" sizes="100vw" className="rounded-full w-20 h-20 object-contain border" />}
                   <div>
                     <h1 className='text-xl font-semibold'>{userDetails && userDetails.name}</h1>
                     <p className='text-sm italic text-gray-600 font-semibold'>@{userDetails && userDetails.username}</p>
                   </div>
                 </div>
                 {
-                  self ? <button className='bg-[#9d9290] text-white font-semibold px-5 py-1 rounded-lg' onClick={() => setOpenModal(true)}>Edit Profile</button> : <button onClick={handleFollow} className={`${isFollowing ? 'bg-[#9d9290]' : 'bg-[#0381ec]'}  text-white font-semibold px-5 py-1 rounded-lg`}>{isFollowing ? 'Following' : 'Follow'}</button>
+                  self ? <button className='bg-[#9d9290] text-white font-semibold px-2 py-1 rounded-lg' onClick={() => setOpenModal(true)}>Edit Profile</button> : <button onClick={handleFollow} className={`${isFollowing ? 'bg-[#9d9290]' : 'bg-[#0381ec]'}  text-white font-semibold px-2 py-1 rounded-lg`}>{isFollowing ? 'Following' : 'Follow'}</button>
                 }
               </div>
-              <p>{userDetails && userDetails.bio}</p>
+              <p className='px-4'>{userDetails && userDetails.bio}</p>
               <div className='border flex justify-evenly items-center mt-1'>
                 <div className='flex flex-col items-center'>
                   {userDetails && <><h1 className='font-bold'>{formatNumber(userDetails.posts.length)}</h1><p>posts</p></>}
