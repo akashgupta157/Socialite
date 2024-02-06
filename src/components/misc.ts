@@ -55,4 +55,3 @@ export function timeAgo(date: string): string {
     return timestamp.toLocaleDateString("en-US", options);
   }
 }
-

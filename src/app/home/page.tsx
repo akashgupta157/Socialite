@@ -32,7 +32,7 @@ const Home = () => {
             <Spinner aria-label="Extra large spinner example" size="xl" />
           </div>
           :
-          <div className='flex flex-col gap-3 px-5'>
+          <div className='flex flex-col gap-3 px-5 mt-5'>
             {
               posts?.map((post: any) => <Posts key={post._id} post={post} isProfile={true} />)
             }
