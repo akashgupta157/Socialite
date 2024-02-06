@@ -32,10 +32,12 @@ const Posts = (props: any) => {
                 <div>
                     {
                         post?.attachments.length > 0 &&
-                        <div className='grid grid-cols-2 gap-1'>
+                        <div className='grid grid-cols-2 max-h-[200px] md:max-h-[300px] mt-5'>
                             {
                                 post?.attachments.map((attachment: any, i: number) => (
-                                    <Image key={i} src={attachment.url} alt={attachment} width='0' height='0' sizes='100vw' className='w-full h-full object-cover' />
+                                    <div key={i} className='border h-[100px] md:h-[150px] flex justify-center items-center'>
+                                        <Image src={attachment.url} alt={attachment} width='0' height='0' sizes='100vw' className='w-fit object-cover max-h-[100px] md:max-h-[150px]' />
+                                    </div>
                                 ))
                             }
                         </div>
