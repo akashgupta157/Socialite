@@ -11,7 +11,7 @@ import { Spinner } from 'flowbite-react'
 const Home = () => {
   const user = useSelector((state: any) => state.user.user)
   const config = configure(user.token)
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const isMobile = useMediaQuery({ query: `(max-width: 767px)` });
   async function fetchPosts() {
@@ -32,7 +32,11 @@ const Home = () => {
             <Spinner aria-label="Extra large spinner example" size="xl" />
           </div>
           :
-          <Posts posts={posts} inProfile={false} />
+          <div className='flex flex-col gap-3 px-5'>
+            {
+              posts?.map((post: any) => <Posts key={post._id} post={post} isProfile={true} />)
+            }
+          </div>
       }
     </div>
   );
