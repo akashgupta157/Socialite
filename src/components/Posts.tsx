@@ -1,10 +1,27 @@
-import React from 'react'
-import isAuth from '@/IsCompAuth';
+import axios from 'axios';
 import Image from 'next/image';
-import { timeAgo } from './misc';
+import { configure, timeAgo } from './misc';
+import isAuth from '@/IsCompAuth';
+import { formatNumber } from './misc';
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 import { Bookmark, Dot, Heart, MessageCircle, MoreVertical, Send } from 'lucide-react';
 const Posts = (props: any) => {
     const { isProfile, post } = props
+    const user = useSelector((state: any) => state.user.user)
+    const [isLiked, setIsLiked] = useState(post.likes.includes(user._id));
+    const [isSaved, setIsSaved] = useState(false);
+    const config = configure(user.token);
+    const handleLike = async () => {
+        if (isLiked) {
+            post.likes.splice(post.likes.indexOf(user._id), 1);
+            setIsLiked(false);
+        } else {
+            post.likes.push(user._id);
+            setIsLiked(true);
+        }
+        await axios.patch(`/api/post/crudposts`, { postId: post._id }, config);
+    }
     return (
         <div className='border-b  overflow-hidden'>
             {
@@ -43,14 +60,14 @@ const Posts = (props: any) => {
                         </div>
                     }
                 </div>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center mt-3 select-none'>
                     <div className='flex gap-3'>
-                        <p><Heart /></p>
-                        <p><MessageCircle /></p>
-                        <p><Send /> Share</p>
+                        <p className={`flex items-center gap-1 ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart className='cursor-pointer' onClick={handleLike} fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(post?.likes.length)}</p>
+                        <p className='text-gray-500 flex items-center gap-1'><MessageCircle className=' cursor-pointer' />{formatNumber(post?.comments.length)}</p>
+                        <p className='text-gray-500 flex items-center gap-1'><Send className=' cursor-pointer' /> Share</p>
 
                     </div>
-                    <Bookmark />
+                    <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"}`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} /></p>
                 </div>
             </div>
         </div>

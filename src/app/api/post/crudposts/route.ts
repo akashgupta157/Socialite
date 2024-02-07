@@ -51,3 +51,41 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: error.message, success: false });
   }
 }
+export async function PATCH(request: NextRequest) {
+  try {
+    await dbConnect();
+    const headersInstance = headers();
+    const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
+    const payload = jwt.decode(BearerToken) as JwtPayload;
+    const user = await userModel.findOne({ username: payload.username });
+    if (!user) {
+      return NextResponse.json({ message: "User not found", success: false });
+    }
+    const { postId } = await request.json();
+    const post = await postModel.findById(postId);
+    if (!post) {
+      return NextResponse.json({ message: "Post not found", success: false });
+    }
+    const isLiked = post.likes.includes(user._id);
+    if (isLiked) {
+      post.likes = post.likes.filter(
+        (userId: { toString: () => any }) =>
+          userId.toString() !== user._id.toString()
+      );
+      await post.save();
+      return NextResponse.json({
+        message: "Post unliked successfully",
+        success: true,
+      });
+    } else {
+      post.likes.push(user._id);
+      await post.save();
+      return NextResponse.json({
+        message: "Post liked successfully",
+        success: true,
+      });
+    }
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message, success: false });
+  }
+}

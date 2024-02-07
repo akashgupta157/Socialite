@@ -1,5 +1,4 @@
 import axios from "axios";
-
 export const uploadCloudinary = async (file: string | Blob) => {
   const formData = new FormData();
   formData.append("file", file);
