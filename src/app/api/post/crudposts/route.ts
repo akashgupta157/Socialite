@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     const posts = await postModel
       .find({ user: { $in: [...user.following, user._id] } })
       .populate("user", "profilePicture name username")
-      .sort({ updatedAt: -1 });
+      .sort({ createdAt: -1 });
     return NextResponse.json({ posts });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });
@@ -61,29 +61,51 @@ export async function PATCH(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ message: "User not found", success: false });
     }
-    const { postId } = await request.json();
-    const post = await postModel.findById(postId);
-    if (!post) {
-      return NextResponse.json({ message: "Post not found", success: false });
-    }
-    const isLiked = post.likes.includes(user._id);
-    if (isLiked) {
-      post.likes = post.likes.filter(
-        (userId: { toString: () => any }) =>
-          userId.toString() !== user._id.toString()
-      );
-      await post.save();
-      return NextResponse.json({
-        message: "Post unliked successfully",
-        success: true,
-      });
-    } else {
-      post.likes.push(user._id);
-      await post.save();
-      return NextResponse.json({
-        message: "Post liked successfully",
-        success: true,
-      });
+    const { postId, action } = await request.json();
+    if (action === "like") {
+      const post = await postModel.findById(postId);
+      if (!post) {
+        return NextResponse.json({ message: "Post not found", success: false });
+      }
+      const isLiked = post.likes.includes(user._id);
+      if (isLiked) {
+        post.likes = post.likes.filter(
+          (userId: { toString: () => any }) =>
+            userId.toString() !== user._id.toString()
+        );
+        await post.save();
+        return NextResponse.json({
+          message: "Post unliked successfully",
+          success: true,
+        });
+      } else {
+        post.likes.push(user._id);
+        await post.save();
+        return NextResponse.json({
+          message: "Post liked successfully",
+          success: true,
+        });
+      }
+    } else if (action === "save") {
+      const isSaved = user.saved.includes(postId);
+      if (isSaved) {
+        user.saved = user.saved.filter(
+          (postId: { toString: () => any }) =>
+            postId.toString() !== postId.toString()
+        );
+        await user.save();
+        return NextResponse.json({
+          message: "Post unsaved successfully",
+          success: true,
+        });
+      } else {
+        user.saved.push(postId);
+        await user.save();
+        return NextResponse.json({
+          message: "Post saved successfully",
+          success: true,
+        });
+      }
     }
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });

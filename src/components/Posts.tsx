@@ -1,16 +1,18 @@
 import axios from 'axios';
 import Image from 'next/image';
-import { configure, timeAgo } from './misc';
 import isAuth from '@/IsCompAuth';
 import { formatNumber } from './misc';
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import { configure, timeAgo } from './misc';
+import { LOGIN } from '@/redux/slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { Bookmark, Dot, Heart, MessageCircle, MoreVertical, Send } from 'lucide-react';
 const Posts = (props: any) => {
+    const dispatch = useDispatch()
     const { isProfile, post } = props
     const user = useSelector((state: any) => state.user.user)
     const [isLiked, setIsLiked] = useState(post.likes.includes(user._id));
-    const [isSaved, setIsSaved] = useState(false);
+    const [isSaved, setIsSaved] = useState(user.saved.includes(post._id));
     const config = configure(user.token);
     const handleLike = async () => {
         if (isLiked) {
@@ -20,7 +22,16 @@ const Posts = (props: any) => {
             post.likes.push(user._id);
             setIsLiked(true);
         }
-        await axios.patch(`/api/post/crudposts`, { postId: post._id }, config);
+        await axios.patch(`/api/post/crudposts`, { postId: post._id, action: "like" }, config);
+    }
+    const handleSave = async () => {
+        const updatedSavedPosts = isSaved
+            ? user.saved.filter((id: any) => id !== post._id)
+            : [...user.saved, post._id];
+        dispatch(LOGIN({ ...user, saved: updatedSavedPosts }));
+        sessionStorage.setItem('user', JSON.stringify({ ...user, saved: updatedSavedPosts }));
+        setIsSaved(!isSaved);
+        await axios.patch(`/api/post/crudposts`, { postId: post._id, action: "save" }, config);
     }
     return (
         <div className='border-b  overflow-hidden'>
@@ -67,7 +78,7 @@ const Posts = (props: any) => {
                         <p className='text-gray-500 flex items-center gap-1'><Send className=' cursor-pointer' /> Share</p>
 
                     </div>
-                    <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"}`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} /></p>
+                    <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"}`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} onClick={handleSave} /></p>
                 </div>
             </div>
         </div>
