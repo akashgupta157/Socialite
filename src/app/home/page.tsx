@@ -16,7 +16,7 @@ const Home = () => {
   const isMobile = useMediaQuery({ query: `(max-width: 767px)` });
   async function fetchPosts() {
     setLoading(true)
-    const { data } = await axios.get('/api/post/crudposts', config)
+    const { data } = await axios.get('/api/post/crudposts?action=home', config)
     setPosts(data.posts)
     setLoading(false)
   }
@@ -24,7 +24,7 @@ const Home = () => {
     fetchPosts()
   }, []);
   return (
-    <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:border-r md:p-5 md:max-h-[90vh] md:w-[55%]'>
+    <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:p-5 md:max-h-[90vh] md:w-[55%] md:mx-auto'>
       {!isMobile && <PostBox />}
       {
         loading ?

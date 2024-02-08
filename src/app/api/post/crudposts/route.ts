@@ -42,10 +42,34 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ message: "User not found", success: false });
     }
-    const posts = await postModel
-      .find({ user: { $in: [...user.following, user._id] } })
-      .populate("user", "profilePicture name username")
-      .sort({ createdAt: -1 });
+    let posts;
+    const { searchParams } = new URL(request.url);
+    const action = searchParams.get("action");
+    switch (action) {
+      case "home":
+        posts = await postModel
+          .find({ user: { $in: [...user.following, user._id] } })
+          .populate("user", "profilePicture name username")
+          .sort({ createdAt: -1 });
+        break;
+      case "saved":
+        posts = await postModel
+          .find({ _id: { $in: user.saved } })
+          .populate("user", ["name", "username", "profilePicture"]);
+        break;
+      case "posts":
+        posts = await postModel
+          .find({ user: user._id })
+          .sort({ createdAt: -1 });
+        break;
+      case "liked":
+        posts = await postModel
+          .find({ likes: user._id })
+          .populate("user", ["name", "username", "profilePicture"]);
+        break;
+      default:
+        return NextResponse.json({ message: "Invalid action", success: false });
+    }
     return NextResponse.json({ posts });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });

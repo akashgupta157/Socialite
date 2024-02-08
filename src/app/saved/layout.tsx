@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar"
 import Sidebar from "@/components/Sidebar"
-export default function ProfileLayout({
+export default function SavedLayout({
     children,
 }: {
     children: React.ReactNode
