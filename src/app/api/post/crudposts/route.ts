@@ -114,8 +114,7 @@ export async function PATCH(request: NextRequest) {
       const isSaved = user.saved.includes(postId);
       if (isSaved) {
         user.saved = user.saved.filter(
-          (postId: { toString: () => any }) =>
-            postId.toString() !== postId.toString()
+          (id: { toString: () => any }) => id.toString() !== postId.toString()
         );
         await user.save();
         return NextResponse.json({

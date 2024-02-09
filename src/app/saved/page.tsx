@@ -28,11 +28,21 @@ const Saved = () => {
                         <Spinner aria-label="Extra large spinner example" size="xl" />
                     </div>
                     :
-                    <div className='flex flex-col gap-3 px-5 mt-5'>
+                    <>
                         {
-                            posts?.map((post: any) => <Posts key={post._id} post={post} isProfile={true} />)
+                            posts.length === 0 ?
+                                <div>
+                                    <h1 className='text-3xl font-bold'>No Saved Posts Found</h1>
+                                    <p>Go back and save some posts</p>
+                                </div>
+                                :
+                                <div className='flex flex-col gap-3 px-5 mt-5'>
+                                    {
+                                        posts?.map((post: any) => <Posts key={post._id} post={post} isProfile={true} />)
+                                    }
+                                </div>
                         }
-                    </div>
+                    </>
             }
         </div>
     )
