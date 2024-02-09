@@ -13,7 +13,7 @@ const Saved = () => {
     const [posts, setPosts] = useState([]);
     async function fetchPosts() {
         setLoading(true)
-        const { data } = await axios.get('/api/post/crudposts?action=saved', config)
+        const { data } = await axios.get('/api/post?action=saved', config)
         setPosts(data.posts)
         setLoading(false)
     }

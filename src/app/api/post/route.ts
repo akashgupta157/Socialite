@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     switch (action) {
       case "home":
         posts = await postModel
-          .find({ user: { $in: [...user.following, user._id] } })
+          .find({ user: { $in: [...user.following] } })
           .populate("user", "profilePicture name username")
           .sort({ createdAt: -1 });
         break;

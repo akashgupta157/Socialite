@@ -16,7 +16,7 @@ const Home = () => {
   const isMobile = useMediaQuery({ query: `(max-width: 767px)` });
   async function fetchPosts() {
     setLoading(true)
-    const { data } = await axios.get('/api/post/crudposts?action=home', config)
+    const { data } = await axios.get('/api/post?action=home', config)
     setPosts(data.posts)
     setLoading(false)
   }
