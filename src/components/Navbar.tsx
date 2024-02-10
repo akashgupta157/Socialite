@@ -7,15 +7,17 @@ import { useSelector } from 'react-redux';
 import isAuth from '@/IsCompAuth'
 const Image = React.lazy(() => import('next/image'));
 import axios from 'axios';
-import { configure } from './misc';
+import { configure } from '../config/misc';
 import { Avatar } from 'flowbite-react';
 import { useRouter } from 'next/navigation';
+import useDebounce from '@/config/useDebounce';
 const Navbar = () => {
     const user = useSelector((state: any) => state.user.user)
     const token = useSelector((state: any) => state.user.user?.token)
     const config = configure(token)
     const router = useRouter()
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebounce(search, 500)
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const fetchResults = async () => {
         try {
@@ -29,15 +31,10 @@ const Navbar = () => {
         }
     };
     useEffect(() => {
-        const debounceTimer = setTimeout(() => {
-            if (search?.length > 0) {
-                fetchResults();
-            } else if (search?.length == 0) {
-                setSearchResults([]);
-            }
-        }, 500);
-        return () => clearTimeout(debounceTimer);
-    }, [search]);
+        if (debouncedSearch) {
+            fetchResults()
+        }
+    }, [debouncedSearch])
     return (
         <nav className='sticky top-0 flex justify-between items-center border-b md:h-[10vh] h-[7vh] px-5 bg-white z-10'>
             <Image src={logo} alt="logo" priority className='w-[100px] md:w-[150px]' />

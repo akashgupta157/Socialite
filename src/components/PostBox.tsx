@@ -4,7 +4,7 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { configure, uploadCloudinary } from './misc';
+import { configure, uploadCloudinary } from '../config/misc';
 import toast from 'react-hot-toast';
 export default function PostBox() {
     const [loading, setLoading] = useState(false);

@@ -4,7 +4,7 @@ import isAuth from '@/IsCompAuth';
 import PostBox from '@/components/PostBox';
 import { useMediaQuery } from 'react-responsive';
 import { useSelector } from 'react-redux'
-import { configure } from '@/components/misc'
+import { configure } from '@/config/misc'
 import axios from 'axios';
 import Posts from '@/components/Posts';
 import { Spinner } from 'flowbite-react'

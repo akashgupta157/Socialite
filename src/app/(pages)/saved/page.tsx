@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import isAuth from '@/IsCompAuth'
 import { Spinner } from 'flowbite-react';
 import { useSelector } from 'react-redux';
-import { configure } from '@/components/misc';
+import { configure } from '@/config/misc';
 import axios from 'axios';
 import Posts from '@/components/Posts';
 const Saved = () => {

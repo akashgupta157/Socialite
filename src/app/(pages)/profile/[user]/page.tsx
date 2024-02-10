@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePathname, useRouter } from 'next/navigation'
 import { Spinner, Modal, Button, FloatingLabel } from 'flowbite-react'
-import { configure, formatNumber, uploadCloudinary } from '@/components/misc'
+import { configure, formatNumber, uploadCloudinary } from '@/config/misc'
 import Posts from '@/components/Posts'
 interface UserDetails {
   _id: string

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Image from 'next/image';
 import isAuth from '@/IsCompAuth';
-import { formatNumber } from './misc';
+import { formatNumber } from '../config/misc';
 import React, { useState } from 'react'
-import { configure, timeAgo } from './misc';
+import { configure, timeAgo } from '../config/misc';
 import { LOGIN } from '@/redux/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Bookmark, Dot, Heart, MessageCircle, MoreVertical, Send } from 'lucide-react';
