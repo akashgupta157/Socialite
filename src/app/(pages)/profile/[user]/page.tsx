@@ -1,15 +1,16 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import isAuth from '@/IsCompAuth'
-import { useDispatch, useSelector } from 'react-redux'
-import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
 import axios from 'axios'
+import Image from 'next/image'
+import isAuth from '@/IsCompAuth'
 import toast from 'react-hot-toast'
-import { configure, formatNumber, uploadCloudinary } from '@/components/misc'
-import { Spinner, Modal, Button, FloatingLabel } from 'flowbite-react'
 import { Camera } from 'lucide-react'
 import { LOGIN } from '@/redux/slices/userSlice'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { usePathname, useRouter } from 'next/navigation'
+import { Spinner, Modal, Button, FloatingLabel } from 'flowbite-react'
+import { configure, formatNumber, uploadCloudinary } from '@/components/misc'
+import Posts from '@/components/Posts'
 interface UserDetails {
   bio: string
   followers: any
@@ -32,6 +33,8 @@ const Profile = () => {
   const [currentTab, setCurrentTab] = useState('posts');
   const [openModal, setOpenModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
+  const [posts, setPosts] = useState([]);
+  const [postLoading, setPostLoading] = useState(true);
   const [updateProfile, setUpdateProfile] = useState({
     profilePicture: user.profilePicture,
     name: user.name,
@@ -60,12 +63,28 @@ const Profile = () => {
     }
     setLoading(false)
   }
+  const handlePost = async () => {
+    setPostLoading(true); // Set loading state to true before fetching posts
+    try {
+      const { data } = await axios.get(`/api/post?action=${currentTab}`, config);
+      setPosts(data.posts);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    } finally {
+      setPostLoading(false);
+    }
+  };
   useEffect(() => {
     fetchUserDetails()
+    handlePost()
     if (user.username === username) {
       setSelf(true)
     }
   }, []);
+  useEffect(() => {
+    setPosts([]);
+    handlePost()
+  }, [currentTab]);
   useEffect(() => {
     const isUserFollowed = userDetails?.followers.some((follower: { _id: any }) => follower._id === user._id);
     setIsFollowing(isUserFollowed)
@@ -160,8 +179,47 @@ const Profile = () => {
               </div>
             </nav>
             <div className='flex justify-evenly items-center'>
-              <button className={`px-2 md:text-lg ${currentTab === 'posts' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('posts')}>Posts</button>
-              <button className={`px-2 md:text-lg ${currentTab === 'likes' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('likes')}>Likes</button>
+              <button className={`px-2 md:text-lg md:font-semibold ${currentTab === 'posts' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() =>
+                setCurrentTab('posts')
+              }>Posts</button>
+              <button className={`px-2 md:text-lg md:font-semibold ${currentTab === 'liked' && "text-[#0381ec] border-t-2 border-[#0381ec]"}`} onClick={() => setCurrentTab('liked')
+              }>Likes</button>
+            </div>
+            <div className='md:pt-2 md:w-[70%] md:mx-auto md:my-5 my-3'>
+              {currentTab === 'posts' && (
+                <>
+                  {postLoading ? (
+                    <div className='flex justify-center items-center mt-5'>
+                      <Spinner aria-label="Post loading spinner" size="md" />
+                    </div>
+                  ) : (
+                    <>
+                      {posts.length === 0 ? (
+                        <h1 className='text-3xl font-bold text-center'>No Posts Found</h1>
+                      ) : (
+                        posts?.map((post: any) => <Posts key={post._id} post={post} />)
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+              {currentTab === 'liked' && (
+                <>
+                  {postLoading ? (
+                    <div className='flex justify-center items-center mt-5'>
+                      <Spinner aria-label="Post loading spinner" size="md" />
+                    </div>
+                  ) : (
+                    <>
+                      {posts.length === 0 ? (
+                        <h1 className='text-3xl font-bold text-center'>You don’t have any likes yet</h1>
+                      ) : (
+                        posts?.map((post: any) => <Posts key={post._id} post={post} />)
+                      )}
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
       }

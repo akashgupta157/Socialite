@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
       case "posts":
         posts = await postModel
           .find({ user: user._id })
+          .populate("user", ["name", "username", "profilePicture"])
           .sort({ createdAt: -1 });
         break;
       case "liked":

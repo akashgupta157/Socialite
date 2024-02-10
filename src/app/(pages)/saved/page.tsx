@@ -36,9 +36,9 @@ const Saved = () => {
                                     <p>Go back and save some posts</p>
                                 </div>
                                 :
-                                <div className='flex flex-col gap-3 px-5 mt-5'>
+                                <div className='mt-5'>
                                     {
-                                        posts?.map((post: any) => <Posts key={post._id} post={post} isProfile={true} />)
+                                        posts?.map((post: any) => <Posts key={post._id} post={post} />)
                                     }
                                 </div>
                         }
