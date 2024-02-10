@@ -5,6 +5,7 @@ import Picker from "@emoji-mart/react";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { configure, uploadCloudinary } from './misc';
+import toast from 'react-hot-toast';
 export default function PostBox() {
     const [loading, setLoading] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -55,7 +56,34 @@ export default function PostBox() {
                 content: input,
                 attachments: attachments.length > 0 ? attachments : undefined,
             };
-            await axios.post('/api/post', postData, config);
+            const { data } = await axios.post('/api/post', postData, config);
+            if (data.success) {
+                toast.success(data.message, {
+                    duration: 2000,
+                    position: 'top-center',
+                    style: {
+                        backgroundColor: "#17C60D",
+                        color: 'white'
+                    },
+                    iconTheme: {
+                        primary: 'white',
+                        secondary: "#17C60D"
+                    }
+                })
+            } else {
+                toast.error(data.message, {
+                    duration: 2000,
+                    position: 'top-center',
+                    style: {
+                        backgroundColor: "#E03615",
+                        color: 'white'
+                    },
+                    iconTheme: {
+                        primary: 'white',
+                        secondary: "#E03615"
+                    }
+                })
+            }
             setInput('');
             setSelectedFiles([]);
         } catch (error) {
