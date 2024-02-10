@@ -18,7 +18,7 @@ const Navbar = () => {
     const router = useRouter()
     const [search, setSearch] = useState("");
     const debouncedSearch = useDebounce(search, 500)
-    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [searchResults, setSearchResults] = useState<any[]>([0]);
     const fetchResults = async () => {
         try {
             const { data } = await axios.get(
@@ -34,6 +34,9 @@ const Navbar = () => {
         if (debouncedSearch) {
             fetchResults()
         }
+        if (!search) {
+            setSearchResults([0])
+        }
     }, [debouncedSearch])
     return (
         <nav className='sticky top-0 flex justify-between items-center border-b md:h-[10vh] h-[7vh] px-5 bg-white z-10'>
@@ -43,13 +46,13 @@ const Navbar = () => {
                 <input type="text" autoComplete='off' placeholder="Search now..." onChange={(e) => setSearch(e.target.value)} id='search' className='w-full bg-transparent border-transparent focus:border-transparent focus:ring-0' />
             </label>
             {
-                searchResults?.length > 0 &&
+                (searchResults?.length > 0 && searchResults[0] !== 0) &&
                 <div className='absolute top-[8.5vh] bg-white left-[30%] w-[250px] max-h-[200px] overflow-y-scroll scrollbar-none py-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded'>
                     {
                         searchResults.map((e, i) => (
                             <div key={i}>
                                 <div className='flex items-center gap-3 hover:bg-gray-100 cursor-pointer px-2 py-1' onClick={() => {
-                                    setSearchResults([])
+                                    setSearch("")
                                     router.push(`/profile/${e.username}`)
                                 }}>
                                     <Avatar img={e.profilePicture} rounded />
@@ -62,6 +65,12 @@ const Navbar = () => {
                             </div>
                         ))
                     }
+                </div>
+            }
+            {
+                (searchResults?.length === 0) &&
+                <div className='absolute top-[8.5vh] bg-white left-[30%] w-[250px] max-h-[200px] overflow-y-scroll scrollbar-none py-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded'>
+                    <p className='text-center text-gray-400'>User not found</p>
                 </div>
             }
             <div className='hidden md:flex items-center gap-4'>
