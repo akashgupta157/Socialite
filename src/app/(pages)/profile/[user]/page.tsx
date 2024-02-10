@@ -12,6 +12,7 @@ import { Spinner, Modal, Button, FloatingLabel } from 'flowbite-react'
 import { configure, formatNumber, uploadCloudinary } from '@/components/misc'
 import Posts from '@/components/Posts'
 interface UserDetails {
+  _id: string
   bio: string
   followers: any
   following: any
@@ -64,9 +65,10 @@ const Profile = () => {
     setLoading(false)
   }
   const handlePost = async () => {
-    setPostLoading(true); // Set loading state to true before fetching posts
+    if (!userDetails) return
+    setPostLoading(true);
     try {
-      const { data } = await axios.get(`/api/post?action=${currentTab}`, config);
+      const { data } = await axios.get(`/api/post?action=${currentTab}&userId=${userDetails._id}`, config);
       setPosts(data.posts);
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -84,7 +86,7 @@ const Profile = () => {
   useEffect(() => {
     setPosts([]);
     handlePost()
-  }, [currentTab]);
+  }, [userDetails, currentTab]);
   useEffect(() => {
     const isUserFollowed = userDetails?.followers.some((follower: { _id: any }) => follower._id === user._id);
     setIsFollowing(isUserFollowed)

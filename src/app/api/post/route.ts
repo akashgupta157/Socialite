@@ -45,6 +45,7 @@ export async function GET(request: NextRequest) {
     let posts;
     const { searchParams } = new URL(request.url);
     const action = searchParams.get("action");
+    const userId = searchParams.get("userId");
     switch (action) {
       case "home":
         posts = await postModel
@@ -59,13 +60,13 @@ export async function GET(request: NextRequest) {
         break;
       case "posts":
         posts = await postModel
-          .find({ user: user._id })
+          .find({ user: userId })
           .populate("user", ["name", "username", "profilePicture"])
           .sort({ createdAt: -1 });
         break;
       case "liked":
         posts = await postModel
-          .find({ likes: user._id })
+          .find({ likes: userId })
           .populate("user", ["name", "username", "profilePicture"]);
         break;
       default:
