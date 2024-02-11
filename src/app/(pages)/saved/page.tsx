@@ -31,7 +31,7 @@ const Saved = () => {
                     <>
                         {
                             posts.length === 0 ?
-                                <div>
+                                <div className='p-5 md:p-0'>
                                     <h1 className='text-3xl font-bold'>No Saved Posts Found</h1>
                                     <p>Go back and save some posts</p>
                                 </div>

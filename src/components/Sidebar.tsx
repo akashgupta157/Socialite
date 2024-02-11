@@ -26,7 +26,7 @@ const Sidebar = () => {
                     router.push('/login')
                 }} className='flex items-center gap-2 px-5 py-3 rounded-lg cursor-pointer text-[#0381ec] border hover:bg-gray-200'><LogOut />Logout</span>
             </div >
-            <div className='md:hidden h-[7vh] border absolute bottom-0 w-full flex items-center justify-around z-10'>
+            <div className='md:hidden h-[7vh] border absolute bottom-0 w-full flex items-center justify-around z-[5]'>
                 <Link href={'/home'} className={`flex items-center gap-2 p-2 rounded-full cursor-pointer ${pathname === '/home' ? 'bg-[#0381ec] text-white' : 'hover:bg-gray-200'}`}><Home /></Link>
                 <Link href={'/explore'} className={`flex items-center gap-2 p-2 rounded-full cursor-pointer ${pathname === '/explore' ? 'bg-[#0381ec] text-white' : 'hover:bg-gray-200'}`}><Compass /></Link>
                 <Link href={'/addpost'} className={`flex items-center gap-2 p-2 rounded-full cursor-pointer ${pathname === '/addpost' ? 'bg-[#0381ec] text-white' : 'hover:bg-gray-200'}`}><Plus /></Link>

@@ -35,7 +35,7 @@ const Home = () => {
           <>
             {
               posts.length === 0 ?
-                <h1 className='text-3xl font-bold mt-5'>Welcome to Socialite!</h1>
+                <h1 className='text-3xl font-bold p-5 md:pl-0'>Welcome to Socialite!</h1>
                 :
                 <div className='mt-5'>
                   {
