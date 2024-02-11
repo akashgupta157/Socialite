@@ -24,7 +24,7 @@ const Home = () => {
     fetchPosts()
   }, []);
   return (
-    <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:p-5 md:max-h-[90vh] md:w-[55%] md:mx-auto'>
+    <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:p-5 md:max-h-[90vh] md:w-[55%] border-r'>
       {!isMobile && <PostBox />}
       {
         loading ?
