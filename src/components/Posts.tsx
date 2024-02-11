@@ -40,47 +40,49 @@ const Posts = (props: any) => {
     }
     return (
         <div className='border overflow-hidden hover:bg-gray-100 p-3 border-t-0'>
-            <div className='flex justify-between items-center'>
-                <div className='flex gap-3 items-center'>
-                    <Image src={post.user?.profilePicture} alt={post.user?.username} width='0' height='0' sizes='100vw' className='w-10 h-10 md:w-12 md:h-12 rounded-full object-contain border cursor-pointer' onClick={VisitProfile} />
-                    <div className='flex flex-col'>
-                        <b className='cursor-pointer' onClick={VisitProfile}>{post.user?.name}</b>
-                        <p className='text-gray-500 flex items-center text-xs cursor-pointer'><i onClick={VisitProfile}>@{post.user?.username}</i><Dot />{timeAgo(post.createdAt)}</p>
+            <div className='flex gap-3'>
+                <Image src={post.user?.profilePicture} alt={post.user?.username} width='0' height='0' sizes='100vw' className='w-10 h-10 md:w-12 md:h-12 rounded-full object-contain border cursor-pointer' onClick={VisitProfile} />
+                <div className='w-full'>
+                    <div className='flex justify-between items-center'>
+                        <div className='flex gap-3 items-center'>
+                            <b className='cursor-pointer' onClick={VisitProfile}>{post.user?.name}</b>
+                            <p className='text-gray-500 flex items-center text-xs cursor-pointer'><i onClick={VisitProfile}>@{post.user?.username}</i><Dot />{timeAgo(post.createdAt)}</p>
+                        </div>
+                        <MoreVertical className='text-gray-500' size={20} />
                     </div>
-                </div>
-                <MoreVertical className='text-gray-500' size={20} />
-            </div>
-            <div className="pt-2 md:pl-12">
-                <p>
-                    {post.content.split(" ").map((str: string, i: number) => {
-                        if (str.startsWith("#") && str.length > 2) {
-                            return <a href='#' key={i} className="text-blue-500">{str + " "}</a>;
-                        }
-                        return str + " ";
-                    })}
-                </p>
-                <div>
-                    {
-                        post?.attachments.length > 0 &&
-                        <div className='grid grid-cols-2 max-h-[200px] md:max-h-[310px] mt-2'>
+                    <div className="pt-2">
+                        <p className='max-w-full break-words'>
+                            {post.content.split(" ").map((str: string, i: number) => {
+                                if (str.startsWith("#") && str.length > 2) {
+                                    return <a href='#' key={i} className="text-blue-500">{str + " "}</a>;
+                                }
+                                return str + " ";
+                            })}
+                        </p>
+                        <div>
                             {
-                                post?.attachments.map((attachment: any, i: number) => (
-                                    <div key={i} className='border h-[100px] md:h-[150px] flex justify-center items-center'>
-                                        <Image loading='lazy' src={attachment.url} alt={attachment} width='0' height='0' sizes='100vw' className='w-fit object-cover max-h-[100px] md:max-h-[150px]' />
-                                    </div>
-                                ))
+                                post?.attachments.length > 0 &&
+                                <div className='grid grid-cols-2 max-h-[200px] md:max-h-[310px] mt-2'>
+                                    {
+                                        post?.attachments.map((attachment: any, i: number) => (
+                                            <div key={i} className='border h-[100px] md:h-[150px] flex justify-center items-center'>
+                                                <Image loading='lazy' src={attachment.url} alt={attachment} width='0' height='0' sizes='100vw' className='w-fit object-cover max-h-[100px] md:max-h-[150px]' />
+                                            </div>
+                                        ))
+                                    }
+                                </div>
                             }
                         </div>
-                    }
-                </div>
-                <div className='flex justify-between items-center mt-5 select-none'>
-                    <div className='flex gap-3'>
-                        <p className={`flex items-center gap-1 hover:text-[#ee3462] ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart className='cursor-pointer' onClick={handleLike} fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(post?.likes.length)}</p>
-                        <p className='text-gray-500 flex items-center gap-1 hover:text-[#01ba7d]'><MessageCircle className=' cursor-pointer' />{formatNumber(post?.comments.length)}</p>
-                        <p className='text-gray-500 flex items-center gap-1'><Send className=' cursor-pointer' /> Share</p>
+                        <div className='flex justify-between items-center mt-5 select-none'>
+                            <div className='flex gap-3'>
+                                <p className={`flex items-center gap-1 hover:text-[#ee3462] ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart className='cursor-pointer' onClick={handleLike} fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(post?.likes.length)}</p>
+                                <p className='text-gray-500 flex items-center gap-1 hover:text-[#01ba7d]'><MessageCircle className=' cursor-pointer' />{formatNumber(post?.comments.length)}</p>
+                                <p className='text-gray-500 flex items-center gap-1'><Send className=' cursor-pointer' /> Share</p>
 
+                            </div>
+                            <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"} hover:text-[#0381ec]`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} onClick={handleSave} /></p>
+                        </div>
                     </div>
-                    <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"} hover:text-[#0381ec]`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} onClick={handleSave} /></p>
                 </div>
             </div>
         </div>
