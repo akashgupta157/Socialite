@@ -29,7 +29,8 @@ const Navbar = () => {
     const fetchResults = async () => {
         try {
             const { data } = await axios.get(
-                `api/user/search?search=${search}&user=${user._id}`
+                `api/user/search?search=${search}`,
+                config
             );
             setSearchResults(data.users);
         } catch (error) {

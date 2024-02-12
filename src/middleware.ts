@@ -19,5 +19,5 @@ export default async function middleware(req: NextRequest) {
   }
 }
 export const config = {
-  matcher: ["/api/post", "/api/user/[username]", "/api/user/profile"],
+  matcher: ["/api/post", "/api/user"],
 };
