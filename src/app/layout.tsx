@@ -3,7 +3,6 @@ import { Lato } from 'next/font/google'
 import './globals.css'
 import Providers from '@/redux/Providers'
 import { Toaster } from 'react-hot-toast'
-export const dynamic = 'force-dynamic'
 const lato = Lato({
   subsets: ['latin'],
   weight: ['100', '300', '400', '700', '900']
