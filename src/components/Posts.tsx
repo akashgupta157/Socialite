@@ -16,10 +16,12 @@ const Posts = (props: any) => {
     const [isLiked, setIsLiked] = useState(post.likes.includes(user._id));
     const [isSaved, setIsSaved] = useState(user.saved.includes(post._id));
     const config = configure(user.token);
-    const VisitProfile = () => {
+    const VisitProfile = (e: any) => {
+        e.stopPropagation();
         router.push(`/profile/${post.user.username}`)
     }
-    const handleLike = async () => {
+    const handleLike = async (e: any) => {
+        e.stopPropagation();
         if (isLiked) {
             post.likes.splice(post.likes.indexOf(user._id), 1);
             setIsLiked(false);
@@ -29,7 +31,8 @@ const Posts = (props: any) => {
         }
         await axios.patch(`/api/post`, { postId: post._id, action: "like" }, config);
     }
-    const handleSave = async () => {
+    const handleSave = async (e: any) => {
+        e.stopPropagation();
         const updatedSavedPosts = isSaved
             ? user.saved.filter((id: any) => id !== post._id)
             : [...user.saved, post._id];
@@ -39,7 +42,7 @@ const Posts = (props: any) => {
         await axios.patch(`/api/post`, { postId: post._id, action: "save" }, config);
     }
     return (
-        <div className='border overflow-hidden hover:bg-gray-100 p-3 border-t-0'>
+        <div className='border overflow-hidden hover:bg-gray-100 p-3 border-t-0 cursor-pointer' onClick={() => { router.push(`/post/${post._id}`) }}>
             <div className='flex gap-3'>
                 <Image src={post.user?.profilePicture} alt={post.user?.username} width='0' height='0' sizes='100vw' className='w-10 h-10 md:w-12 md:h-12 rounded-full object-contain border cursor-pointer' onClick={VisitProfile} />
                 <div className='w-full'>
