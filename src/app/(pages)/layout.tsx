@@ -15,4 +15,3 @@ export default function Layout({
         </div>
     )
 }
-export const dynamic = 'force-dynamic'
