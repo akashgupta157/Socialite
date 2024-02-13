@@ -1,12 +1,15 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import isAuth from '@/IsCompAuth'
-import { usePathname, useRouter } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
 import axios from 'axios'
-import { Spinner } from 'flowbite-react'
 import Image from 'next/image'
+import isAuth from '@/IsCompAuth'
+import { ArrowLeft, Bookmark, Heart, MessageCircle, Send } from 'lucide-react'
+import { Spinner } from 'flowbite-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { configure, formatNumber } from '@/config/misc'
+import React, { useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
+import { LOGIN } from '@/redux/slices/userSlice'
 interface PostDetails {
     _id: string
     user: {
@@ -17,13 +20,20 @@ interface PostDetails {
     }
     content: string
     attachments: any
+    likes: any
+    comments: any
 }
 const Post = () => {
     const router = useRouter()
+    const dispatch = useDispatch()
     const pathname = usePathname()
     const postId = pathname?.split('/').pop()
     const [postDetail, setPostDetail] = useState<PostDetails | null>(null);
     const [loading, setLoading] = useState(false);
+    const user = useSelector((state: any) => state.user.user)
+    const [isLiked, setIsLiked] = useState(postDetail?.likes.includes(user._id));
+    const [isSaved, setIsSaved] = useState(user.saved.includes(postDetail?._id));
+    const config = configure(user.token);
     const fetchPostDetails = async () => {
         setLoading(true)
         const { data } = await axios.get(`/api/post/${postId}`)
@@ -42,6 +52,25 @@ const Post = () => {
         router.push(`/profile/${postDetail.user.username}`)
     }
     console.log(postDetail)
+    const handleLike = async (e: any) => {
+        if (isLiked) {
+            postDetail?.likes.splice(postDetail?.likes.indexOf(user._id), 1);
+            setIsLiked(false);
+        } else {
+            postDetail?.likes.push(user._id);
+            setIsLiked(true);
+        }
+        await axios.patch(`/api/post`, { postId: postDetail?._id, action: "like" }, config);
+    }
+    const handleSave = async (e: any) => {
+        const updatedSavedPosts = isSaved
+            ? user.saved.filter((id: any) => id !== postDetail?._id)
+            : [...user.saved, postDetail?._id];
+        dispatch(LOGIN({ ...user, saved: updatedSavedPosts }));
+        sessionStorage.setItem('user', JSON.stringify({ ...user, saved: updatedSavedPosts }));
+        setIsSaved(!isSaved);
+        await axios.patch(`/api/post`, { postId: postDetail?._id, action: "save" }, config);
+    }
     const imageCount = postDetail?.attachments.length;
     const renderImageGrid = () => {
         if (imageCount === 1) {
@@ -124,7 +153,7 @@ const Post = () => {
                         </div>
                         :
                         <>
-                            <div className='p-3'>
+                            <div className='p-3 md:px-5'>
                                 <div className='flex gap-3 items-center cursor-pointer w-fit' onClick={VisitProfile}>
                                     <Image src={postDetail?.user.profilePicture} alt={'profile'} priority width="0" height="0" sizes="100vw" className="rounded-full w-12 h-12 md:w-14 md:h-14 object-contain" />
                                     <div>
@@ -142,6 +171,14 @@ const Post = () => {
                                         })}
                                     </p>
                                     {renderImageGrid()}
+                                    <div className='flex justify-between items-center mt-5 select-none border-y py-3'>
+                                        <div className='flex gap-3'>
+                                            <p className={`flex items-center gap-1 hover:text-[#ee3462] ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart className='cursor-pointer' onClick={handleLike} fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(postDetail?.likes.length)}</p>
+                                            <p className='text-gray-500 flex items-center gap-1 hover:text-[#01ba7d]'><MessageCircle className=' cursor-pointer' />{formatNumber(postDetail?.comments.length)}</p>
+                                            <p className='text-gray-500 flex items-center gap-1'><Send className=' cursor-pointer' /> Share</p>
+                                        </div>
+                                        <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"} hover:text-[#0381ec]`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} onClick={handleSave} /></p>
+                                    </div>
                                 </div>
                             </div>
                         </>
