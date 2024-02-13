@@ -8,6 +8,7 @@ import { LOGIN } from '@/redux/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Bookmark, Dot, Heart, MessageCircle, MoreVertical, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 const Posts = (props: any) => {
     const dispatch = useDispatch()
     const router = useRouter()
@@ -41,51 +42,117 @@ const Posts = (props: any) => {
         setIsSaved(!isSaved);
         await axios.patch(`/api/post`, { postId: post._id, action: "save" }, config);
     }
+    const imageCount = post?.attachments.length;
+    const renderImageGrid = () => {
+        if (imageCount === 1) {
+            return (
+                <Image priority width="0" height="0" sizes="100vw"
+                    src={post?.attachments[0].url}
+                    alt='image'
+                    className="w-1/2 h-1/2 object-cover rounded-lg border"
+                />
+            );
+        } else if (imageCount === 2) {
+            return (
+                <div className="flex h-72 gap-1 overflow-hidden rounded-lg">
+                    {post?.attachments.map((image: { url: string | StaticImport }, i: React.Key | null | undefined) => (
+                        <Image priority width="0" height="0" sizes="100vw"
+                            key={i}
+                            src={image.url}
+                            alt='image'
+                            className="w-1/2 h-full object-cover"
+                        />
+                    ))}
+                </div>
+            );
+        } else if (imageCount === 3) {
+            return (
+                <div className="flex h-72 gap-1 overflow-hidden rounded-lg">
+                    <Image priority width="0" height="0" sizes="100vw"
+                        src={post?.attachments[0].url}
+                        alt='image'
+                        className="w-1/2 h-full object-cover"
+                    />
+                    <div className='flex flex-col w-1/2 gap-1'>
+                        {post?.attachments.slice(1, 3).map((image: { url: string | StaticImport }, i: React.Key | null | undefined) => (
+                            <Image priority width="0" height="0" sizes="100vw"
+                                key={i}
+                                src={image.url}
+                                alt='image'
+                                className="w-full h-1/2 object-cover"
+                            />
+                        ))}
+                    </div>
+                </div>
+            );
+        } else if (imageCount === 4) {
+            return (
+                <div className="grid grid-cols-2 gap-1 h-72 rounded-lg overflow-hidden">
+                    {post?.attachments.slice(0, 2).map((image: { url: string | StaticImport }, i: React.Key | null | undefined) => (
+                        <Image priority width="0" height="0" sizes="100vw"
+                            key={i}
+                            src={image.url}
+                            alt='image'
+                            className="w-full h-36 object-cover"
+                        />
+                    ))}
+                    {post?.attachments.slice(2, 4).map((image: { url: string | StaticImport }, i: React.Key | null | undefined) => (
+                        <Image priority width="0" height="0" sizes="100vw"
+                            key={i}
+                            src={image.url}
+                            alt='image'
+                            className="w-full h-36 object-cover"
+                        />
+                    ))}
+                </div>
+            );
+        } else {
+            return null
+        }
+    };
     return (
         <div className='border overflow-hidden hover:bg-gray-100 p-3 border-t-0 cursor-pointer' onClick={() => { router.push(`/post/${post._id}`) }}>
-            <div className='flex gap-3'>
-                <Image src={post.user?.profilePicture} alt={post.user?.username} width='0' height='0' sizes='100vw' className='w-10 h-10 md:w-12 md:h-12 rounded-full object-contain border cursor-pointer' onClick={VisitProfile} />
-                <div className='w-full'>
-                    <div className='flex justify-between items-center'>
-                        <div className='flex gap-3 items-center'>
-                            <b className='cursor-pointer' onClick={VisitProfile}>{post.user?.name}</b>
-                            <p className='text-gray-500 flex items-center text-xs cursor-pointer'><i onClick={VisitProfile}>@{post.user?.username}</i><Dot />{timeAgo(post.createdAt)}</p>
-                        </div>
-                        <MoreVertical className='text-gray-500' size={20} />
+            <div className='flex justify-between items-center'>
+                <div className='flex gap-3 items-center'>
+                    <Image src={post.user?.profilePicture} alt={post.user?.username} width='0' height='0' sizes='100vw' className='w-10 h-10 md:w-12 md:h-12 rounded-full object-contain border cursor-pointer' onClick={VisitProfile} />
+                    <div className='flex flex-col'>
+                        <b className='cursor-pointer' onClick={VisitProfile}>{post.user?.name}</b>
+                        <p className='text-gray-500 flex items-center text-xs cursor-pointer'><i onClick={VisitProfile}>@{post.user?.username}</i><Dot />{timeAgo(post.createdAt)}</p>
                     </div>
-                    <div className="pt-2">
-                        <p className='max-w-full break-words'>
-                            {post.content.split(" ").map((str: string, i: number) => {
-                                if (str.startsWith("#") && str.length > 2) {
-                                    return <a href='#' key={i} className="text-blue-500">{str + " "}</a>;
-                                }
-                                return str + " ";
-                            })}
-                        </p>
-                        <div>
+                </div>
+                <MoreVertical className='text-gray-500' size={20} />
+            </div>
+            <div className="pt-2 md:pl-12">
+                <p className='max-w-full break-words'>
+                    {post.content.split(" ").map((str: string, i: number) => {
+                        if (str.startsWith("#") && str.length > 2) {
+                            return <a href='#' key={i} className="text-blue-500">{str + " "}</a>;
+                        }
+                        return str + " ";
+                    })}
+                </p>
+                {/* <div>
+                    {
+                        post?.attachments.length > 0 &&
+                        <div className='grid grid-cols-2 max-h-[200px] md:max-h-[310px] mt-2'>
                             {
-                                post?.attachments.length > 0 &&
-                                <div className='grid grid-cols-2 max-h-[200px] md:max-h-[310px] mt-2'>
-                                    {
-                                        post?.attachments.map((attachment: any, i: number) => (
-                                            <div key={i} className='border h-[100px] md:h-[150px] flex justify-center items-center'>
-                                                <Image loading='lazy' src={attachment.url} alt={attachment} width='0' height='0' sizes='100vw' className='w-fit object-cover max-h-[100px] md:max-h-[150px]' />
-                                            </div>
-                                        ))
-                                    }
-                                </div>
+                                post?.attachments.map((attachment: any, i: number) => (
+                                    <div key={i} className='border h-[100px] md:h-[150px] flex justify-center items-center'>
+                                        <Image loading='lazy' src={attachment.url} alt={attachment} width='0' height='0' sizes='100vw' className='w-fit object-cover max-h-[100px] md:max-h-[150px]' />
+                                    </div>
+                                ))
                             }
                         </div>
-                        <div className='flex justify-between items-center mt-5 select-none'>
-                            <div className='flex gap-3'>
-                                <p className={`flex items-center gap-1 hover:text-[#ee3462] ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart className='cursor-pointer' onClick={handleLike} fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(post?.likes.length)}</p>
-                                <p className='text-gray-500 flex items-center gap-1 hover:text-[#01ba7d]'><MessageCircle className=' cursor-pointer' />{formatNumber(post?.comments.length)}</p>
-                                <p className='text-gray-500 flex items-center gap-1'><Send className=' cursor-pointer' /> Share</p>
-
-                            </div>
-                            <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"} hover:text-[#0381ec]`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} onClick={handleSave} /></p>
-                        </div>
+                    }
+                </div> */}
+                {renderImageGrid()}
+                <div className='flex justify-between items-center mt-5 select-none'>
+                    <div className='flex gap-3'>
+                        <p className={`flex items-center gap-1 hover:text-[#ee3462] ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart className='cursor-pointer' onClick={handleLike} fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(post?.likes.length)}</p>
+                        <p className='text-gray-500 flex items-center gap-1 hover:text-[#01ba7d]'><MessageCircle className=' cursor-pointer' />{formatNumber(post?.comments.length)}</p>
+                        <p className='text-gray-500 flex items-center gap-1'><Send className=' cursor-pointer' /> Share</p>
                     </div>
+                    <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"} hover:text-[#0381ec]`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} onClick={handleSave} /></p>
                 </div>
             </div>
         </div>

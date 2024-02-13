@@ -37,7 +37,7 @@ const Home = () => {
               posts.length === 0 ?
                 <h1 className='text-3xl font-bold p-5 md:pl-0'>Welcome to Socialite!</h1>
                 :
-                <div className='mt-5'>
+                <div className=''>
                   {
                     posts?.map((post: any) => <Posts key={post._id} post={post} />)
                   }
