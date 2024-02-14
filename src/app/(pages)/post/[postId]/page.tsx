@@ -2,14 +2,14 @@
 import axios from 'axios'
 import Image from 'next/image'
 import isAuth from '@/IsCompAuth'
-import { ArrowLeft, Bookmark, Heart, MessageCircle, Send } from 'lucide-react'
 import { Spinner } from 'flowbite-react'
+import { LOGIN } from '@/redux/slices/userSlice'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { configure, formatNumber } from '@/config/misc'
-import React, { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
-import { LOGIN } from '@/redux/slices/userSlice'
+import { ArrowLeft, Bookmark, Heart, MessageCircle, Send } from 'lucide-react'
 interface PostDetails {
     _id: string
     user: {
@@ -22,6 +22,7 @@ interface PostDetails {
     attachments: any
     likes: any
     comments: any
+    createdAt: string
 }
 const Post = () => {
     const router = useRouter()
@@ -139,10 +140,22 @@ const Post = () => {
             return null
         }
     };
+    function formatDateAndTime(timestamp: any): any {
+        const date = new Date(timestamp);
+        const options: Intl.DateTimeFormatOptions = {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+        };
+        return date.toLocaleString('en-US', options);
+    }
     return (
         <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[55%] border-r'>
-            <div className='border-b flex p-3 gap-3 md:px-5 md:py-3 md:gap-6 items-center sticky top-0 bg-white'>
-                <ArrowLeft onClick={() => router.back()} />
+            <div className='border-b flex px-3 py-2 gap-3 md:px-5 md:gap-5 items-center sticky top-0 bg-white'>
+                <ArrowLeft className='cursor-pointer hover:bg-gray-200 rounded-full p-1' size={30} onClick={() => router.back()} />
                 <p className='text-xl font-bold'>Post</p>
             </div>
             <div>
@@ -171,7 +184,8 @@ const Post = () => {
                                         })}
                                     </p>
                                     {renderImageGrid()}
-                                    <div className='flex justify-between items-center mt-5 select-none border-y py-3'>
+                                    <p className={`text-gray-500 mt-2 `}>{formatDateAndTime(postDetail?.createdAt)}</p>
+                                    <div className='flex justify-between items-center mt-2 select-none border-y py-3'>
                                         <div className='flex gap-3'>
                                             <p className={`flex items-center gap-1 hover:text-[#ee3462] ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart className='cursor-pointer' onClick={handleLike} fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(postDetail?.likes.length)}</p>
                                             <p className='text-gray-500 flex items-center gap-1 hover:text-[#01ba7d]'><MessageCircle className=' cursor-pointer' />{formatNumber(postDetail?.comments.length)}</p>
