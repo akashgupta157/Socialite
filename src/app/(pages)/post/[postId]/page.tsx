@@ -152,6 +152,17 @@ const Post = () => {
         };
         return date.toLocaleString('en-US', options);
     }
+    const [text, setText] = useState('');
+    useEffect(() => {
+        const updatedText = postDetail?.content?.split(" ").map((str, i) => {
+            if (str.startsWith("#") && str.length > 1) {
+                return `<a href='#' key=${i} class='text-blue-500'>${str} </a>`;
+            }
+            return str + " ";
+        })
+            ?.join("") ?? '';
+        setText(updatedText);
+    }, [postDetail]);
     return (
         <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[55%] border-r'>
             <div className='border-b flex px-3 py-2 gap-3 md:px-5 md:gap-5 items-center sticky top-0 bg-white'>
@@ -175,14 +186,7 @@ const Post = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <p className='max-w-full break-words my-2'>
-                                        {postDetail?.content.split(" ").map((str: string, i: number) => {
-                                            if (str.startsWith("#") && str.length > 2) {
-                                                return <a href='#' key={i} className="text-blue-500">{str + " "}</a>;
-                                            }
-                                            return str + " ";
-                                        })}
-                                    </p>
+                                    <div className='max-w-full break-words my-2' dangerouslySetInnerHTML={{ __html: text }} />
                                     {renderImageGrid()}
                                     <p className={`text-gray-500 mt-2 `}>{formatDateAndTime(postDetail?.createdAt)}</p>
                                     <div className='flex justify-between items-center mt-2 select-none border-y py-3'>

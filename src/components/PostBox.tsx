@@ -53,7 +53,7 @@ export default function PostBox() {
                 }
             }
             const postData = {
-                content: input,
+                content: input.replace(/\n/g, '<br/>'),
                 attachments: attachments.length > 0 ? attachments : undefined,
             };
             const { data } = await axios.post('/api/post', postData, config);
@@ -112,7 +112,6 @@ export default function PostBox() {
                     className='border-0 resize-none w-full p-0 focus:ring-0 bg-transparent text-lg min-h-[10vh] max-h-[30vh]'
                     rows={Math.min(10, input.split('\n').length)}
                     value={input}
-                    maxLength={280}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder='What are you thinking?' />
                 {

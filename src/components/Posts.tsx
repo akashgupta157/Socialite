@@ -2,7 +2,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import isAuth from '@/IsCompAuth';
 import { formatNumber } from '../config/misc';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { configure, timeAgo } from '../config/misc';
 import { LOGIN } from '@/redux/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -110,6 +110,17 @@ const Posts = (props: any) => {
             return null
         }
     };
+    const [text, setText] = useState('');
+    useEffect(() => {
+        const updatedText = post?.content?.split(" ").map((str: string, i: any) => {
+            if (str.startsWith("#") && str.length > 1) {
+                return `<a href='#' key=${i} class='text-blue-500'>${str} </a>`;
+            }
+            return str + " ";
+        })
+            ?.join("") ?? '';
+        setText(updatedText);
+    }, [post]);
     return (
         <div className='border overflow-hidden hover:bg-gray-100 p-3 border-t-0 cursor-pointer' onClick={() => { router.push(`/post/${post._id}`) }}>
             <div className='flex justify-between items-center'>
@@ -123,28 +134,7 @@ const Posts = (props: any) => {
                 <MoreVertical className='text-gray-500' size={20} />
             </div>
             <div className="pt-2 md:pl-12">
-                <p className='max-w-full break-words'>
-                    {post.content.split(" ").map((str: string, i: number) => {
-                        if (str.startsWith("#") && str.length > 2) {
-                            return <a href='#' key={i} className="text-blue-500">{str + " "}</a>;
-                        }
-                        return str + " ";
-                    })}
-                </p>
-                {/* <div>
-                    {
-                        post?.attachments.length > 0 &&
-                        <div className='grid grid-cols-2 max-h-[200px] md:max-h-[310px] mt-2'>
-                            {
-                                post?.attachments.map((attachment: any, i: number) => (
-                                    <div key={i} className='border h-[100px] md:h-[150px] flex justify-center items-center'>
-                                        <Image loading='lazy' src={attachment.url} alt={attachment} width='0' height='0' sizes='100vw' className='w-fit object-cover max-h-[100px] md:max-h-[150px]' />
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    }
-                </div> */}
+                <div className='max-w-full break-words' dangerouslySetInnerHTML={{ __html: text }} />
                 {renderImageGrid()}
                 <div className='flex justify-between items-center mt-5 select-none'>
                     <div className='flex gap-3'>
