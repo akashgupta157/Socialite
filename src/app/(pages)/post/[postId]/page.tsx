@@ -198,6 +198,9 @@ const Post = () => {
                                         <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"} hover:text-[#0381ec]`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} onClick={handleSave} /></p>
                                     </div>
                                 </div>
+                                <div>
+                                    
+                                </div>
                             </div>
                         </>
                 }

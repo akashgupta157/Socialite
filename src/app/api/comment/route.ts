@@ -5,7 +5,6 @@ import postModel from "@/models/post.model";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-
 export async function POST(request: NextRequest) {
   try {
     await dbConnect();
