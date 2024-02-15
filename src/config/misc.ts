@@ -54,3 +54,26 @@ export function timeAgo(date: string): string {
     return timestamp.toLocaleDateString("en-US", options);
   }
 }
+export const formatHashtags = (content: string) => {
+  return content
+    .split(" ")
+    .map((str, i) => {
+      if (str.startsWith("#") && str.length > 1) {
+        return `<a href='#' key=${i} class='text-blue-500'>${str} </a>`;
+      }
+      return str + " ";
+    })
+    .join("");
+};
+export function formatDateAndTime(timestamp: any): any {
+  const date = new Date(timestamp);
+  const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+  };
+  return date.toLocaleString('en-US', options);
+}
