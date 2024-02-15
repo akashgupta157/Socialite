@@ -17,7 +17,7 @@ export default function CommentBox(props: any) {
         const sym = e.unified.split("_");
         const arr: string[] = [];
         sym.forEach((el: string) => arr.push("0x" + el));
-        let emoji = String.fromCodePoint(...arr.map(Number));
+        let emoji = String?.fromCodePoint(...arr.map(Number));
         setInput(input + emoji);
     };
     const handleOutsideClick = (event: any) => {
@@ -76,7 +76,7 @@ export default function CommentBox(props: any) {
     return (
         <div className={`w-full border-b p-3 ${loading && 'pointer-events-none opacity-50'}`}>
             <textarea
-                className='border-0 resize-none w-full p-0 focus:ring-0 bg-transparent text-lg min-h-[5vh] max-h-[30vh]'
+                className='border-0 resize-none w-full p-0 focus:ring-0 bg-transparent min-h-[5vh] max-h-[30vh]'
                 rows={Math.min(10, input.split('\n').length)}
                 value={input}
                 maxLength={280}
