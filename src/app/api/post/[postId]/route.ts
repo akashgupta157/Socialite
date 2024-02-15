@@ -23,7 +23,7 @@ export async function GET(
         populate: {
           path: "user",
           model: "User",
-          select: ["name", "username"],
+          select: ["name", "username", "profilePicture"],
         },
       });
     if (!post) {

@@ -12,23 +12,23 @@ export async function POST(request: NextRequest) {
     const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
     const payload = jwt.decode(BearerToken) as JwtPayload;
     const { postId, content } = await request.json();
-    const user = await userModel.findOne({ username: payload.username });
-    if (!user) {
-      return NextResponse.json({ message: "User not found", success: false });
-    }
     const post = await postModel.findById(postId);
     if (!post) {
       return NextResponse.json({ message: "Post not found", success: false });
     }
     const newComment = new commentModel({
-      user: user._id,
+      user: payload.userId,
       post: post._id,
       content,
     });
     await newComment.save();
     post.comments.push(newComment._id);
     await post.save();
-    return NextResponse.json({ success: true, comment: newComment });
+    return NextResponse.json({
+      success: true,
+      comment: newComment,
+      message: "Comment created successfully",
+    });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });
   }

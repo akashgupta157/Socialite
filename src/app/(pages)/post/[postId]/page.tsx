@@ -10,6 +10,7 @@ import { configure, formatDateAndTime, formatHashtags, formatNumber } from '@/co
 import { usePathname, useRouter } from 'next/navigation'
 import { ArrowLeft, Bookmark, Heart, MessageCircle, Send } from 'lucide-react'
 import ImageGrid from '@/components/ImageGrid'
+import CommentBox from '@/components/CommentBox'
 interface PostDetails {
     _id: string
     user: {
@@ -111,6 +112,7 @@ const Post = () => {
                                         <p className={`${isSaved ? "text-[#0381ec]" : "text-gray-500"} hover:text-[#0381ec]`}><Bookmark className=' cursor-pointer' fill={`${isSaved ? "#0381ec" : "white"}`} onClick={handleSave} /></p>
                                     </div>
                                 </div>
+                                <CommentBox postId={postDetail?._id} />
                             </div>
                         </>
                 }
