@@ -29,6 +29,7 @@ export async function GET(
     if (!post) {
       return NextResponse.json({ message: "Post not found", success: false });
     }
+    post.comments.reverse();
     return NextResponse.json({ success: true, post });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });
