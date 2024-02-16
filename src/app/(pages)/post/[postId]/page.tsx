@@ -80,7 +80,7 @@ const Post = () => {
     }, [postDetail]);
     return (
         <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[55%] border-r'>
-            <div className='border-b flex px-3 py-2 gap-3 md:px-5 md:gap-5 items-center sticky top-0 bg-white z-50'>
+            <div className='border-b flex px-3 py-2 gap-3 md:px-5 md:gap-5 items-center sticky top-0 bg-white z-5'>
                 <ArrowLeft className='cursor-pointer hover:bg-gray-200 rounded-full p-1' size={30} onClick={() => router.back()} />
                 <p className='text-xl font-bold'>Post</p>
             </div>
