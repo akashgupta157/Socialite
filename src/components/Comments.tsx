@@ -1,11 +1,12 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import isAuth from '@/IsCompAuth'
-import { useRouter } from 'next/navigation'
+import axios from 'axios'
 import Image from 'next/image'
-import { Dot, Heart } from 'lucide-react'
-import { formatHashtags, formatNumber, timeAgo } from '@/config/misc'
+import isAuth from '@/IsCompAuth'
 import { useSelector } from 'react-redux'
+import { Dot, Heart } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { configure, formatHashtags, formatNumber, timeAgo } from '@/config/misc'
 function Comments(props: any) {
     const { comment } = props
     console.log(comment)
@@ -13,12 +14,23 @@ function Comments(props: any) {
     const user = useSelector((state: any) => state.user.user)
     const [isLiked, setIsLiked] = useState(comment.likes.includes(user._id));
     const router = useRouter()
+    const config = configure(user.token);
     const VisitProfile = () => {
         router.push(`/profile/${comment.user.username}`)
     }
     useEffect(() => {
         setText(formatHashtags(comment?.content));
     }, [comment]);
+    const handleLike = async () => {
+        if (isLiked) {
+            comment.likes.splice(comment.likes.indexOf(user._id), 1);
+            setIsLiked(false);
+        } else {
+            comment.likes.push(user._id);
+            setIsLiked(true);
+        }
+        await axios.patch(`/api/comment`, { commentId: comment._id, action: "like" }, config);
+    }
     return (
         <div className='my-2 border-b'>
             <div className='flex gap-3 items-center'>
@@ -30,10 +42,9 @@ function Comments(props: any) {
             </div>
             <div className='py-2 md:pl-12 flex justify-between items-start'>
                 <div className='max-w-full break-words ' dangerouslySetInnerHTML={{ __html: text }} />
-                <p className={`flex items-center gap-1 hover:text-[#ee3462] ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart className='cursor-pointer' fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(comment?.likes.length)}</p>
+                <p className={`flex items-center gap-1 hover:text-[#ee3462] ${isLiked ? "text-[#ee3462]" : "text-gray-500"}`}><Heart onClick={handleLike} className='cursor-pointer' fill={`${isLiked ? "#ee3462" : "white"}`} />{formatNumber(comment?.likes.length)}</p>
             </div>
         </div>
     )
 }
-
 export default isAuth(Comments)
