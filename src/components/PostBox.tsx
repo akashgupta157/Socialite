@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { X, Image as ImageIcon, Smile } from 'lucide-react';
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { configure, uploadCloudinary } from '../config/misc';
 import toast from 'react-hot-toast';
+import { UPDATE_FEED } from '@/redux/slices/feedSlice';
 export default function PostBox() {
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [input, setInput] = useState('');
@@ -58,6 +60,7 @@ export default function PostBox() {
             };
             const { data } = await axios.post('/api/post', postData, config);
             if (data.success) {
+                dispatch(UPDATE_FEED(data.post));
                 toast.success(data.message, {
                     duration: 2000,
                     position: 'top-center',

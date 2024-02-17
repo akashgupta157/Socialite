@@ -26,6 +26,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({
       message: "Post created successfully",
       success: true,
+      post: newPost,
     });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });

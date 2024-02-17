@@ -10,6 +10,8 @@ import Posts from '@/components/Posts';
 import { Spinner } from 'flowbite-react'
 const Home = () => {
   const user = useSelector((state: any) => state.user.user)
+  const newPost = useSelector((state: any) => state.feed)
+  console.log(newPost)
   const config = configure(user.token)
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,6 +25,12 @@ const Home = () => {
   useEffect(() => {
     fetchPosts()
   }, []);
+  useEffect(() => {
+    if (newPost) {
+      let new_Post = newPost.post
+      setPosts([{ ...new_Post, user }, ...posts])
+    }
+  }, [newPost])
   return (
     <div className='max-h-[79vh] overflow-y-scroll scrollbar-none md:p-5 md:max-h-[90vh] md:w-[55%] border-r'>
       {!isMobile && <PostBox />}
