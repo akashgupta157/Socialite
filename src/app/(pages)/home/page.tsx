@@ -11,7 +11,6 @@ import { Spinner } from 'flowbite-react'
 const Home = () => {
   const user = useSelector((state: any) => state.user.user)
   const newPost = useSelector((state: any) => state.feed)
-  console.log(newPost)
   const config = configure(user.token)
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
