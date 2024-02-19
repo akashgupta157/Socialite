@@ -32,6 +32,7 @@ const ImageGrid = ({ images }: ImageGridProps) => {
             currentIndex={currentIndex}
             images={images}
             setOpenModal={setOpenModal}
+            setCurrentIndex={setCurrentIndex}
           />
         )}
       </>
@@ -59,6 +60,7 @@ const ImageGrid = ({ images }: ImageGridProps) => {
             currentIndex={currentIndex}
             images={images}
             setOpenModal={setOpenModal}
+            setCurrentIndex={setCurrentIndex}
           />
         )}
       </>
@@ -98,6 +100,7 @@ const ImageGrid = ({ images }: ImageGridProps) => {
             currentIndex={currentIndex}
             images={images}
             setOpenModal={setOpenModal}
+            setCurrentIndex={setCurrentIndex}
           />
         )}
       </>
@@ -125,6 +128,7 @@ const ImageGrid = ({ images }: ImageGridProps) => {
             currentIndex={currentIndex}
             images={images}
             setOpenModal={setOpenModal}
+            setCurrentIndex={setCurrentIndex}
           />
         )}
       </>
