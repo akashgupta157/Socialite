@@ -27,7 +27,7 @@ const Home = () => {
   useEffect(() => {
     if (newPost) {
       let new_Post = newPost.post
-      setPosts([{ ...new_Post, user }, ...posts])
+      // setPosts([{ ...new_Post, user }, ...posts])
     }
   }, [newPost])
   return (
