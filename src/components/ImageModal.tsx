@@ -10,15 +10,18 @@ const ImageModal = (props: any) => {
   const [dimensions, { loading, error }] = useImageSize(
     images[currentIndex]?.url
   );
-  const handleClose = () => {
+  const handleClose = (e: any) => {
+    e.stopPropagation();
     setOpenModal(false);
   };
-  const handlePrev = () => {
+  const handlePrev = (e: any) => {
+    e.stopPropagation();
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
   };
-  const handleNext = () => {
+  const handleNext = (e: any) => {
+    e.stopPropagation();
     if (currentIndex < images.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }

@@ -25,7 +25,10 @@ const ImageGrid = ({ images }: ImageGridProps) => {
           src={images[0]?.url}
           alt="image"
           className="w-1/2 h-1/2 object-cover rounded-lg border cursor-pointer"
-          onClick={() => handleImageClick(0)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleImageClick(0);
+          }}
         />
         {openModal && (
           <ImageModal
@@ -51,7 +54,10 @@ const ImageGrid = ({ images }: ImageGridProps) => {
               src={image.url}
               alt="image"
               className="w-1/2 h-full object-cover cursor-pointer"
-              onClick={() => handleImageClick(i)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleImageClick(i);
+              }}
             />
           ))}
         </div>
@@ -77,7 +83,10 @@ const ImageGrid = ({ images }: ImageGridProps) => {
             src={images[0]?.url}
             alt="image"
             className="w-1/2 h-full object-cover"
-            onClick={() => handleImageClick(0)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleImageClick(0);
+            }}
           />
           <div className="flex flex-col w-1/2 gap-1">
             {images.slice(1, 3).map((image, i) => (
@@ -90,7 +99,10 @@ const ImageGrid = ({ images }: ImageGridProps) => {
                 src={image.url}
                 alt="image"
                 className="w-full h-1/2 object-cover"
-                onClick={() => handleImageClick(i + 1)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleImageClick(i + 1);
+                }}
               />
             ))}
           </div>
@@ -119,7 +131,10 @@ const ImageGrid = ({ images }: ImageGridProps) => {
               src={image.url}
               alt="image"
               className="w-full h-36 object-cover cursor-pointer"
-              onClick={() => handleImageClick(i)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleImageClick(i);
+              }}
             />
           ))}
         </div>
