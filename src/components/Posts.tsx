@@ -36,7 +36,7 @@ const Posts = (props: any) => {
       post.likes.splice(post.likes.indexOf(user._id), 1);
       setIsLiked(false);
     } else {
-      const like = [user._id];
+      const like = [...post.likes, user._id];
       post.likes = like;
       setIsLiked(true);
     }
