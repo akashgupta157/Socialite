@@ -74,7 +74,7 @@ export default function CommentBox(props: any) {
         }
     };
     return (
-        <div className={`w-full border-b p-3 ${loading && 'pointer-events-none opacity-50'}`}>
+        <div className={`w-full border-b py-3 ${loading && 'pointer-events-none opacity-50'}`}>
             <textarea
                 className='border-0 resize-none w-full p-0 focus:ring-0 bg-transparent min-h-[5vh] max-h-[30vh]'
                 rows={Math.min(10, input.split('\n').length)}
