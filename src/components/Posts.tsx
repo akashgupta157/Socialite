@@ -36,7 +36,8 @@ const Posts = (props: any) => {
       post.likes.splice(post.likes.indexOf(user._id), 1);
       setIsLiked(false);
     } else {
-      post.likes.push(user._id);
+      const like = [user._id];
+      post.likes = like;
       setIsLiked(true);
     }
     await axios.patch(
