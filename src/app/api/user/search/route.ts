@@ -19,11 +19,11 @@ export async function GET(request: NextRequest) {
         ],
       })
       .select("-password");
-    const filteredUsers = users.filter(
-      (user: { _id: { toString: () => any } }) =>
-        user._id.toString() !== payload.userId
-    );
-    return NextResponse.json({ users: filteredUsers });
+    // const filteredUsers = users.filter(
+    //   (user: { _id: { toString: () => any } }) =>
+    //     user._id.toString() !== payload.userId
+    // );
+    return NextResponse.json({ users });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });
   }

@@ -20,7 +20,7 @@ const Navbar = () => {
   const config = configure(token);
   const router = useRouter();
   const [search, setSearch] = useState("");
-  // const debouncedSearch = useDebounce(search, 500)
+  const debouncedSearch = useDebounce(search, 500);
   const [searchResults, setSearchResults] = useState<any[]>([0]);
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleDrawer = () => {
@@ -28,22 +28,20 @@ const Navbar = () => {
   };
   const fetchResults = async () => {
     try {
-      const { data } = await axios.get(
-        `api/user/search?search=${search}`,
-        config
-      );
+      const { data } = await axios.get(`api/user/search?search=${search}`);
       setSearchResults(data.users);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
   useEffect(() => {
-    if (search) {
+    if (debouncedSearch) {
       fetchResults();
-    } else {
+    }
+    if (!search) {
       setSearchResults([0]);
     }
-  }, [search]);
+  }, [debouncedSearch]);
   return (
     <nav className="sticky top-0 flex justify-between items-center border-b md:h-[10vh] h-[7vh] px-5 bg-white z-10">
       <Image
