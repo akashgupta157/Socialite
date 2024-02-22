@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     // const payload = jwt.decode(BearerToken) as JwtPayload;
     const { searchParams } = new URL(request.url);
     const param = searchParams.get("search");
+    console.log(param);
     const users = await userModel
       .find({
         $or: [
