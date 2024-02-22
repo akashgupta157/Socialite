@@ -40,6 +40,7 @@ const Post = () => {
   const [postDetail, setPostDetail] = useState<PostDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state: any) => state.user.user);
+  const newComment = useSelector((state: any) => state.feed.post);
   const [isLiked, setIsLiked] = useState(postDetail?.likes.includes(user._id));
   const [isSaved, setIsSaved] = useState(user.saved.includes(postDetail?._id));
   const config = configure(user.token);
@@ -113,6 +114,19 @@ const Post = () => {
       },
     });
   };
+  useEffect(() => {
+    if (newComment && postDetail) {
+      const updateComment = { ...newComment, user };
+      setPostDetail((prevPostDetail: any) => {
+        const updatedPostDetail = { ...prevPostDetail };
+        updatedPostDetail.comments = [
+          updateComment,
+          ...updatedPostDetail.comments,
+        ];
+        return updatedPostDetail;
+      });
+    }
+  }, [newComment]);
   return (
     <div className="max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[55%] border-r">
       <div className="border-b flex px-3 py-2 gap-3 md:px-5 md:gap-5 items-center sticky top-0 bg-white z-[1]">
