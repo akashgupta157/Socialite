@@ -20,7 +20,7 @@ const Navbar = () => {
   const config = configure(token);
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 500);
+//   const debouncedSearch = useDebounce(search, 500);
   const [searchResults, setSearchResults] = useState<any[]>([0]);
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleDrawer = () => {
@@ -35,13 +35,13 @@ const Navbar = () => {
     }
   };
   useEffect(() => {
-    if (debouncedSearch) {
+    if (search) {
       fetchResults();
     }
     if (!search) {
       setSearchResults([0]);
     }
-  }, [debouncedSearch]);
+  }, [search]);
   return (
     <nav className="sticky top-0 flex justify-between items-center border-b md:h-[10vh] h-[7vh] px-5 bg-white z-10">
       <Image

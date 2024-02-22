@@ -6,9 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
-    const headersInstance = headers();
-    const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
-    const payload = jwt.decode(BearerToken) as JwtPayload;
+    // const headersInstance = headers();
+    // const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
+    // const payload = jwt.decode(BearerToken) as JwtPayload;
     const { searchParams } = new URL(request.url);
     const param = searchParams.get("search");
     const users = await userModel
