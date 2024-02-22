@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import dbConnect from "@/db";
 import userModel from "@/models/user.model";
 import { headers } from "next/headers";
@@ -11,7 +13,6 @@ export async function GET(request: NextRequest) {
     const payload = jwt.decode(BearerToken) as JwtPayload;
     const { searchParams } = new URL(request.url);
     const param = searchParams.get("search");
-    console.log(param)
     const users = await userModel
       .find({
         $or: [
