@@ -117,7 +117,7 @@ const Posts = (props: any) => {
       </div>
       <div className="pt-2 md:pl-12">
         <div
-          className="max-w-full break-words"
+          className="max-w-full break-words mb-2"
           dangerouslySetInnerHTML={{ __html: text }}
         />
         <ImageGrid images={post?.attachments} />

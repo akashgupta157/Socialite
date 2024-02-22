@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import dbConnect from "@/db";
 import userModel from "@/models/user.model";
 import { headers } from "next/headers";
