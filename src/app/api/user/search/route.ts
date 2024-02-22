@@ -6,12 +6,12 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
-    // const headersInstance = headers();
-    // const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
-    // const payload = jwt.decode(BearerToken) as JwtPayload;
+    const headersInstance = headers();
+    const BearerToken = headersInstance.get("authorization")?.split(" ")[1]!;
+    const payload = jwt.decode(BearerToken) as JwtPayload;
     const { searchParams } = new URL(request.url);
     const param = searchParams.get("search");
-    console.log(param);
+    console.log(param)
     const users = await userModel
       .find({
         $or: [
@@ -20,11 +20,11 @@ export async function GET(request: NextRequest) {
         ],
       })
       .select("-password");
-    // const filteredUsers = users.filter(
-    //   (user: { _id: { toString: () => any } }) =>
-    //     user._id.toString() !== payload.userId
-    // );
-    return NextResponse.json({ users });
+    const filteredUsers = users.filter(
+      (user: { _id: { toString: () => any } }) =>
+        user._id.toString() !== payload.userId
+    );
+    return NextResponse.json({ users: filteredUsers });
   } catch (error: any) {
     return NextResponse.json({ message: error.message, success: false });
   }
