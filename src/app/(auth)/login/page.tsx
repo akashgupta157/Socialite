@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import loginImage from "@/images/login.png";
-import { LockKeyhole, Eye, EyeOff, AlertCircle, User } from "lucide-react";
+import { LockKeyhole, Eye, EyeOff, AlertCircle, AtSign } from "lucide-react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -77,14 +77,14 @@ export default function Login() {
           </h1>
           <label className="w-full max-w-xs" htmlFor="email">
             <p className={`${errors.email && "text-red-700"}`}>
-              Username or Email :
+              Email :
             </p>
             <div
               className={`flex items-center border rounded-md px-3 py-1 transition duration-300 ease-in-out focus-within:border-black focus-within:border focus-within:text-[#0d0c22] border-gray-400 text-gray-600 ${
                 errors.email && "border-red-700 focus-within:border-red-700 "
               }`}
             >
-              <User />
+              <AtSign />
               <input
                 type="text"
                 id="email"
