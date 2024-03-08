@@ -2,18 +2,11 @@ import axios from "axios";
 import Image from "next/image";
 import isAuth from "@/IsCompAuth";
 import { formatHashtags, formatNumber } from "../config/misc";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { configure, timeAgo } from "../config/misc";
 import { LOGIN } from "@/redux/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Bookmark,
-  Dot,
-  Heart,
-  MessageCircle,
-  MoreVertical,
-  Send,
-} from "lucide-react";
+import { Bookmark, Dot, Heart, MessageCircle, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ImageGrid from "./ImageGrid";
 import toast from "react-hot-toast";
@@ -91,29 +84,26 @@ const Posts = (props: any) => {
         router.push(`/post/${post._id}`);
       }}
     >
-      <div className="flex justify-between items-center">
-        <div className="flex gap-3 items-center">
-          <Image
-            src={post.user?.profilePicture}
-            alt={post.user?.username}
-            width="0"
-            height="0"
-            sizes="100vw"
-            className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain border cursor-pointer"
-            onClick={VisitProfile}
-          />
-          <div className="flex flex-col">
-            <b className="cursor-pointer" onClick={VisitProfile}>
-              {post.user?.name}
-            </b>
-            <p className="text-gray-500 flex items-center text-xs cursor-pointer">
-              <i onClick={VisitProfile}>@{post.user?.username}</i>
-              <Dot />
-              {timeAgo(post.createdAt)}
-            </p>
-          </div>
+      <div className="flex gap-3 items-center">
+        <Image
+          src={post.user?.profilePicture}
+          alt={post.user?.username}
+          width="0"
+          height="0"
+          sizes="100vw"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain border cursor-pointer"
+          onClick={VisitProfile}
+        />
+        <div className="flex flex-col">
+          <b className="cursor-pointer" onClick={VisitProfile}>
+            {post.user?.name}
+          </b>
+          <p className="text-gray-500 flex items-center text-xs cursor-pointer">
+            <i onClick={VisitProfile}>@{post.user?.username}</i>
+            <Dot />
+            {timeAgo(post.createdAt)}
+          </p>
         </div>
-        <MoreVertical className="text-gray-500" size={20} />
       </div>
       <div className="pt-2 md:pl-12">
         <div

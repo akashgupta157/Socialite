@@ -4,7 +4,7 @@ import Image from "next/image";
 import isAuth from "@/IsCompAuth";
 import { Spinner } from "flowbite-react";
 import { LOGIN } from "@/redux/slices/userSlice";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   configure,
@@ -13,7 +13,15 @@ import {
   formatNumber,
 } from "@/config/misc";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, Bookmark, Heart, MessageCircle, Send } from "lucide-react";
+import {
+  ArrowLeft,
+  Bookmark,
+  Heart,
+  MessageCircle,
+  MoreVertical,
+  Send,
+  Trash2,
+} from "lucide-react";
 import ImageGrid from "@/components/ImageGrid";
 import CommentBox from "@/components/CommentBox";
 import Comments from "@/components/Comments";
@@ -127,6 +135,56 @@ const Post = () => {
       });
     }
   }, [newComment]);
+  const handleDelete = async (e: any) => {
+    e.stopPropagation();
+    const { data } = await axios.delete(`/api/post/${postDetail?._id}`, config);
+    if (data.success) {
+      toast.success(data.message, {
+        duration: 2000,
+        position: "top-center",
+        style: {
+          backgroundColor: "#17C60D",
+          color: "white",
+        },
+        iconTheme: {
+          primary: "white",
+          secondary: "#17C60D",
+        },
+      });
+      router.push("/home");
+    } else {
+      toast.error(data.message, {
+        duration: 2000,
+        position: "top-center",
+        style: {
+          backgroundColor: "#E03615",
+          color: "white",
+        },
+        iconTheme: {
+          primary: "white",
+          secondary: "#E03615",
+        },
+      });
+    }
+  };
+  //? Menu Code
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+  const handleClickOutside = (event: any) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  //? Menu Code
   return (
     <div className="max-h-[79vh] overflow-y-scroll scrollbar-none md:max-h-[90vh] md:w-[55%] border-r">
       <div className="border-b flex px-3 py-2 gap-3 md:px-5 md:gap-5 items-center sticky top-0 bg-white z-[1]">
@@ -145,23 +203,53 @@ const Post = () => {
         ) : (
           <>
             <div className="p-3 md:px-5">
-              <div
-                className="flex gap-3 items-center cursor-pointer w-fit"
-                onClick={VisitProfile}
-              >
-                <Image
-                  src={postDetail?.user.profilePicture}
-                  alt={"profile"}
-                  priority
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  className="rounded-full w-12 h-12 md:w-14 md:h-14 object-contain"
-                />
-                <div>
-                  <p className="font-extrabold">{postDetail?.user.name}</p>
-                  <i className="text-gray-500">@{postDetail?.user.username}</i>
+              <div className="flex justify-between items-center">
+                <div
+                  className="flex gap-3 items-center cursor-pointer w-fit"
+                  onClick={VisitProfile}
+                >
+                  <Image
+                    src={postDetail?.user.profilePicture}
+                    alt={"profile"}
+                    priority
+                    width="0"
+                    height="0"
+                    sizes="100vw"
+                    className="rounded-full w-12 h-12 md:w-14 md:h-14 object-contain"
+                  />
+                  <div>
+                    <p className="font-extrabold">{postDetail?.user.name}</p>
+                    <i className="text-gray-500">
+                      @{postDetail?.user.username}
+                    </i>
+                  </div>
                 </div>
+                {postDetail?.user._id === user._id && (
+                  <div className="relative inline-block text-left">
+                    <div>
+                      <MoreVertical
+                        className="text-gray-500 cursor-pointer"
+                        size={20}
+                        onClick={toggleDropdown}
+                      />
+                    </div>
+                    {isOpen && (
+                      <div
+                        className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                        ref={dropdownRef}
+                      >
+                        <div className="py-1">
+                          <p
+                            className="px-4 py-2 text-sm hover:bg-gray-100 flex justify-center items-center gap-2 text-red-600 cursor-pointer font-semibold"
+                            onClick={handleDelete}
+                          >
+                            <Trash2 /> Delete the post
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               <div>
                 <div
