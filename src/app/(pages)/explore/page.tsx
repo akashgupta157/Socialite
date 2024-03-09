@@ -48,11 +48,11 @@ const Explore = () => {
           <Spinner aria-label="Extra large spinner example" size="xl" />
         </div>
       ) : (
-        <>
+        <div className="border-t">
           {posts.map((post) => (
             <Posts key={post._id} post={post} />
           ))}
-        </>
+        </div>
       )}
     </div>
   );
