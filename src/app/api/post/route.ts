@@ -70,6 +70,12 @@ export async function GET(request: NextRequest) {
           .find({ likes: userId })
           .populate("user", ["name", "username", "profilePicture"]);
         break;
+      case "explore":
+        posts = await postModel
+          .find()
+          .populate("user", ["name", "username", "profilePicture"])
+          .sort({ createdAt: -1 });
+        break;
       default:
         return NextResponse.json({ message: "Invalid action", success: false });
     }
