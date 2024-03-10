@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import dbConnect from "@/db";
 import userModel from "@/models/user.model";
 import jwt, { JwtPayload } from "jsonwebtoken";
