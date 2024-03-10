@@ -61,12 +61,22 @@ Socialite is a state-of-the-art social media platform developed with TypeScript,
    npm install
    ```
 
-3. Start the development server:
+3. Create a .env.local file in the root of the project and add the following:
+    ```bash
+    MONGODB_URI=your_mongodb_uri
+    SECRET_KEY=your_secret_key
+    ```
+    Note: Replace your_mongodb_uri with your MongoDB connection URI and your_secret_key with a secret key for authentication.
+
+4. Start the development server:
    ```bash
    npm run dev
    ```
-
-4. Open your browser and visit [http://localhost:3000](http://localhost:3000) to experience Socialite.
+   
+5. Open your browser and visit [http://localhost:3000](http://localhost:3000) to experience Socialite.
+   
+## Deployment
+Socialite is deployed on Vercel. Visit the live deployment at https://socialite-app.vercel.app.
 
 ## Contribution Guidelines
 
