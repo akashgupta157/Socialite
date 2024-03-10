@@ -1,11 +1,11 @@
 ![logo](https://github.com/akashgupta157/Socialite/assets/112753311/52128941-4ce6-4d21-b0f9-5ff71aa62d7c)
 # Socialite: A Social Media Platform
 
-## Overview
+## Overview ⛳
 
 Socialite is a state-of-the-art social media platform developed with TypeScript, Next.js, and Tailwind CSS. This platform offers a feature-rich and responsive interface that allows users to seamlessly connect, share, and engage with content.
 
-## Features
+## Features ✨
 
 - **Authentication:**
   - Secure user authentication system for account protection.
@@ -34,7 +34,7 @@ Socialite is a state-of-the-art social media platform developed with TypeScript,
 - **Responsive Design:**
   - Enjoy a responsive design that ensures optimal user experience on both mobile and desktop devices.
 
-## Tech Stack
+## Tech Stack 🛠
 
 - **TypeScript:**
   - Enhance code quality and maintainability with static typing.
@@ -48,7 +48,7 @@ Socialite is a state-of-the-art social media platform developed with TypeScript,
 - **Cloudinary Cloud Storage:**
   - Securely store and manage all image uploads in Cloudinary Cloud Storage.
 
-## Getting Started
+## Getting Started 💻
 
 1. Clone the repository:
    ```bash
@@ -75,7 +75,7 @@ Socialite is a state-of-the-art social media platform developed with TypeScript,
    
 5. Open your browser and visit [http://localhost:3000](http://localhost:3000) to experience Socialite.
    
-## Deployment
+## Deployment 🚀
 Socialite is deployed on Vercel. Visit the live deployment at https://socialite-app.vercel.app.
 
 ## Contribution Guidelines
