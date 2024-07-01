@@ -1,7 +1,6 @@
 import axios from "axios";
-import Image from "next/image";
 import isAuth from "@/IsCompAuth";
-import { formatHashtags, formatNumber } from "../config/misc";
+import { formatHashtags, formatNumber, profilePic_fallbackSrc } from "../config/misc";
 import React, { useEffect, useRef, useState } from "react";
 import { configure, timeAgo } from "../config/misc";
 import { LOGIN } from "@/redux/slices/userSlice";
@@ -10,6 +9,7 @@ import { Bookmark, Dot, Heart, MessageCircle, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ImageGrid from "./ImageGrid";
 import toast from "react-hot-toast";
+import ImageFallback from "./ImageFallback";
 const Posts = (props: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -85,9 +85,10 @@ const Posts = (props: any) => {
       }}
     >
       <div className="flex gap-3 items-center">
-        <Image
+        <ImageFallback
           src={post.user?.profilePicture}
           alt={post.user?.username}
+          fallbackSrc={profilePic_fallbackSrc}
           width="0"
           height="0"
           sizes="100vw"

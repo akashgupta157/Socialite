@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import isAuth from "../IsCompAuth";
-import Image from "next/image";
 import { useImageSize } from "react-image-size";
 import { Spinner } from "flowbite-react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import ImageFallback from "./ImageFallback";
+import { post_fallbackSrc } from "@/config/misc";
 const ImageModal = (props: any) => {
   const { currentIndex, images, setOpenModal, setCurrentIndex } = props;
   const [dimensions, { loading, error }] = useImageSize(
@@ -47,7 +48,8 @@ const ImageModal = (props: any) => {
                 <ChevronLeft className="text-white" />
               </button>
             )}
-            <Image
+            <ImageFallback
+              fallbackSrc={post_fallbackSrc}
               src={images[currentIndex]?.url}
               alt="image"
               priority

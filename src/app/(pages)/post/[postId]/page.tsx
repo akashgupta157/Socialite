@@ -1,6 +1,5 @@
 "use client";
 import axios from "axios";
-import Image from "next/image";
 import isAuth from "@/IsCompAuth";
 import { Spinner } from "flowbite-react";
 import { LOGIN } from "@/redux/slices/userSlice";
@@ -11,6 +10,7 @@ import {
   formatDateAndTime,
   formatHashtags,
   formatNumber,
+  profilePic_fallbackSrc,
 } from "@/config/misc";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -26,6 +26,7 @@ import ImageGrid from "@/components/ImageGrid";
 import CommentBox from "@/components/CommentBox";
 import Comments from "@/components/Comments";
 import toast from "react-hot-toast";
+import ImageFallback from "@/components/ImageFallback";
 interface PostDetails {
   _id: string;
   user: {
@@ -208,10 +209,11 @@ const Post = () => {
                   className="flex gap-3 items-center cursor-pointer w-fit"
                   onClick={VisitProfile}
                 >
-                  <Image
+                  <ImageFallback
                     src={postDetail?.user.profilePicture}
                     alt={"profile"}
                     priority
+                    fallbackSrc={profilePic_fallbackSrc}
                     width="0"
                     height="0"
                     sizes="100vw"

@@ -68,12 +68,16 @@ export const formatHashtags = (content: string) => {
 export function formatDateAndTime(timestamp: any): any {
   const date = new Date(timestamp);
   const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
   };
-  return date.toLocaleString('en-US', options);
+  return date.toLocaleString("en-US", options);
 }
+export const profilePic_fallbackSrc =
+  "https://res.cloudinary.com/dm5uvtj7t/image/upload/v1706622367/atwymgd8/exaerdufqcmkmwl9gll2.png";
+export const post_fallbackSrc =
+  "https://res.cloudinary.com/dm5uvtj7t/image/upload/v1719821857/atwymgd8/clvrvgykoiq6b4xrk6m4.webp";

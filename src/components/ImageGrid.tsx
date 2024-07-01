@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import isAuth from "@/IsCompAuth";
 import ImageModal from "./ImageModal";
+import ImageFallback from "./ImageFallback";
+import { post_fallbackSrc } from "@/config/misc";
 interface ImageGridProps {
   images: { url: string }[];
 }
@@ -17,7 +19,8 @@ const ImageGrid = ({ images }: ImageGridProps) => {
   if (imageCount === 1) {
     return (
       <>
-        <Image
+        <ImageFallback
+          fallbackSrc={post_fallbackSrc}
           priority
           width="0"
           height="0"
@@ -25,7 +28,7 @@ const ImageGrid = ({ images }: ImageGridProps) => {
           src={images[0]?.url}
           alt="image"
           className="w-1/2 h-1/2 object-cover rounded-lg border cursor-pointer"
-          onClick={(e) => {
+          onClick={(e: { stopPropagation: () => void }) => {
             e.stopPropagation();
             handleImageClick(0);
           }}
@@ -45,7 +48,8 @@ const ImageGrid = ({ images }: ImageGridProps) => {
       <>
         <div className="flex h-72 gap-1 overflow-hidden rounded-lg border">
           {images.map((image, i) => (
-            <Image
+            <ImageFallback
+              fallbackSrc={post_fallbackSrc}
               priority
               width="0"
               height="0"
@@ -54,7 +58,7 @@ const ImageGrid = ({ images }: ImageGridProps) => {
               src={image.url}
               alt="image"
               className="w-1/2 h-full object-cover cursor-pointer"
-              onClick={(e) => {
+              onClick={(e: { stopPropagation: () => void }) => {
                 e.stopPropagation();
                 handleImageClick(i);
               }}
@@ -75,7 +79,8 @@ const ImageGrid = ({ images }: ImageGridProps) => {
     return (
       <>
         <div className="flex h-72 gap-1 overflow-hidden rounded-lg border">
-          <Image
+          <ImageFallback
+            fallbackSrc={post_fallbackSrc}
             priority
             width="0"
             height="0"
@@ -83,14 +88,15 @@ const ImageGrid = ({ images }: ImageGridProps) => {
             src={images[0]?.url}
             alt="image"
             className="w-1/2 h-full object-cover"
-            onClick={(e) => {
+            onClick={(e: { stopPropagation: () => void }) => {
               e.stopPropagation();
               handleImageClick(0);
             }}
           />
           <div className="flex flex-col w-1/2 gap-1">
             {images.slice(1, 3).map((image, i) => (
-              <Image
+              <ImageFallback
+                fallbackSrc={post_fallbackSrc}
                 priority
                 width="0"
                 height="0"
@@ -99,7 +105,7 @@ const ImageGrid = ({ images }: ImageGridProps) => {
                 src={image.url}
                 alt="image"
                 className="w-full h-1/2 object-cover"
-                onClick={(e) => {
+                onClick={(e: { stopPropagation: () => void }) => {
                   e.stopPropagation();
                   handleImageClick(i + 1);
                 }}
@@ -122,7 +128,8 @@ const ImageGrid = ({ images }: ImageGridProps) => {
       <>
         <div className="grid grid-cols-2 gap-1 h-72 rounded-lg overflow-hidden border">
           {images.map((image, i) => (
-            <Image
+            <ImageFallback
+              fallbackSrc={post_fallbackSrc}
               priority
               width="0"
               height="0"
@@ -131,7 +138,7 @@ const ImageGrid = ({ images }: ImageGridProps) => {
               src={image.url}
               alt="image"
               className="w-full h-36 object-cover cursor-pointer"
-              onClick={(e) => {
+              onClick={(e: { stopPropagation: () => void }) => {
                 e.stopPropagation();
                 handleImageClick(i);
               }}

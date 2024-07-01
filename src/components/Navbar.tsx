@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import isAuth from "@/IsCompAuth";
 const Image = React.lazy(() => import("next/image"));
 import axios from "axios";
-import { configure } from "../config/misc";
+import { configure, profilePic_fallbackSrc } from "../config/misc";
 import { Avatar } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import useDebounce from "@/config/useDebounce";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import { LOGOUT } from "@/redux/slices/userSlice";
+import ImageFallback from "./ImageFallback";
 const Navbar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user.user);
@@ -101,8 +102,9 @@ const Navbar = () => {
           <p className="font-semibold">{user?.name}</p>
           <i className="text-gray-400 text-sm">@{user?.username}</i>
         </div>
-        <Image
+        <ImageFallback
           src={user?.profilePicture}
+          fallbackSrc={profilePic_fallbackSrc}
           alt="user"
           width={50}
           height={50}

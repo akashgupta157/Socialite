@@ -3,10 +3,10 @@ import axios from "axios";
 import isAuth from "@/IsCompAuth";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { configure } from "@/config/misc";
-import Image from "next/image";
+import { configure, profilePic_fallbackSrc } from "@/config/misc";
 import { useRouter } from "next/navigation";
 import { Spinner } from "flowbite-react";
+import ImageFallback from "./ImageFallback";
 const Suggestion = () => {
   const router = useRouter();
   const [profiles, setProfiles] = useState([]);
@@ -38,8 +38,9 @@ const Suggestion = () => {
                 className="flex gap-2 cursor-pointer"
                 onClick={() => router.push(`/profile/${profile.username}`)}
               >
-                <Image
+                <ImageFallback
                   src={profile.profilePicture}
+                  fallbackSrc={profilePic_fallbackSrc}
                   width={45}
                   height={40}
                   alt="avatar"
@@ -57,5 +58,4 @@ const Suggestion = () => {
     </div>
   );
 };
-
 export default isAuth(Suggestion);
