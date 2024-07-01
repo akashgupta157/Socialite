@@ -9,7 +9,7 @@ export default async function middleware(req: NextRequest) {
         message: "No token found",
       });
     }
-    const signature = new TextEncoder().encode(process.env.secretKey);
+    const signature = new TextEncoder().encode(process.env.SECRET_KEY);
     await jose.jwtVerify(BearerToken, signature);
   } catch (error: any) {
     return NextResponse.json({

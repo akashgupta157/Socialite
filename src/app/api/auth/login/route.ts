@@ -20,7 +20,7 @@ export const POST = async (req: Request, res: Response) => {
     }
     const token = jwt.sign(
       { userId: user._id, user: user.email, username: user.username },
-      process.env.secretKey!
+      process.env.SECRET_KEY!
     );
     return NextResponse.json({
       success: true,
