@@ -8,14 +8,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import { Spinner, Modal, Button, FloatingLabel } from "flowbite-react";
-import {
-  configure,
-  formatNumber,
-  profilePic_fallbackSrc,
-  uploadCloudinary,
-} from "@/config/misc";
+import { configure, formatNumber, uploadCloudinary } from "@/config/misc";
 import Posts from "@/components/Posts";
-import ImageFallback from "@/components/ImageFallback";
+import Image from "next/image";
 interface UserDetails {
   _id: string;
   bio: string;
@@ -41,6 +36,7 @@ const Profile = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [posts, setPosts] = useState([]);
   const [postLoading, setPostLoading] = useState(true);
+  const [updateProfileLoading, setUpdateProfileLoading] = useState(false);
   const [updateProfile, setUpdateProfile] = useState({
     profilePicture: user.profilePicture,
     name: user.name,
@@ -124,6 +120,7 @@ const Profile = () => {
   const handleUpdateProfile = async () => {
     try {
       if (selectedFile) {
+        setUpdateProfileLoading(true);
         const { url } = await uploadCloudinary(selectedFile);
         updateProfile.profilePicture = url;
       }
@@ -139,6 +136,7 @@ const Profile = () => {
       );
       dispatch(LOGIN({ ...data.user, token: user.token }));
       setOpenModal(false);
+      setUpdateProfileLoading(false);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -156,9 +154,8 @@ const Profile = () => {
             <div className="flex justify-between items-center px-3 py-2">
               <div className="flex items-center gap-3">
                 {userDetails && (
-                  <ImageFallback
+                  <Image
                     src={userDetails.profilePicture}
-                    fallbackSrc={profilePic_fallbackSrc}
                     loading="lazy"
                     alt={"profilePicture"}
                     width="0"
@@ -232,9 +229,8 @@ const Profile = () => {
           <nav className="hidden md:flex w-[85%] border-b m-auto justify-between items-center py-4 px-5">
             <div className="flex justify-between items-center gap-10">
               {userDetails && (
-                <ImageFallback
+                <Image
                   src={userDetails.profilePicture}
-                  fallbackSrc={profilePic_fallbackSrc}
                   alt={"profilePicture"}
                   width="0"
                   height="0"
@@ -361,9 +357,8 @@ const Profile = () => {
         <Modal.Header>Edit Profile</Modal.Header>
         <Modal.Body>
           <div className="relative max-w-fit mb-2">
-            <ImageFallback
+            <Image
               src={updateProfile.profilePicture}
-              fallbackSrc={profilePic_fallbackSrc}
               alt={"profilePicture"}
               width="0"
               height="0"
@@ -413,10 +408,16 @@ const Profile = () => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleUpdateProfile}>Save</Button>
-          <Button color="gray" onClick={() => setOpenModal(false)}>
-            Cancel
-          </Button>
+          {updateProfileLoading ? (
+            <Button disabled>Save</Button>
+          ) : (
+            <>
+              <Button onClick={handleUpdateProfile}>Save</Button>
+              <Button color="gray" onClick={() => setOpenModal(false)}>
+                Cancel
+              </Button>
+            </>
+          )}
         </Modal.Footer>
       </Modal>
     </>
