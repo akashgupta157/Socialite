@@ -46,7 +46,7 @@ const Navbar = () => {
     }
   }, [debouncedSearch]);
   return (
-    <nav className="sticky top-0 flex justify-between items-center border-b md:h-[10vh] h-[7vh] px-5 bg-white z-10">
+    <nav className="sticky top-0 flex justify-between items-center border-b md:h-[10vh] max-h-[65px] h-[7vh] px-5 bg-white z-10">
       <Image
         src={logo}
         alt="logo"
