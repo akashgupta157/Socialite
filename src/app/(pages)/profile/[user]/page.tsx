@@ -98,18 +98,24 @@ const Profile = () => {
     setIsFollowing(isUserFollowed);
   }, [userDetails]);
   const handleFollow = async () => {
-    if (isFollowing) {
-      if (userDetails) {
-        userDetails.followers = userDetails?.followers.filter(
-          (follower: { _id: any }) => follower._id !== user._id
-        );
-      }
+    if (isFollowing && userDetails) {
+      userDetails.followers = userDetails.followers.filter(
+        (follower: { _id: any }) => follower._id !== user._id
+      );
     } else {
-      userDetails?.followers.push(user._id);
+      if (
+        !userDetails?.followers.some(
+          (follower: { _id: any }) => follower._id === user._id
+        )
+      ) {
+        userDetails?.followers.push({ _id: user._id });
+      }
     }
+
     setIsFollowing(!isFollowing);
     await axios.post(`/api/user/${username}`, { username }, config);
   };
+
   const handleFileChange = (e: any) => {
     setSelectedFile(e.target.files[0]);
     setUpdateProfile({
