@@ -45,7 +45,7 @@ const Posts = (props: any) => {
       ? user.saved.filter((id: any) => id !== post._id)
       : [...user.saved, post._id];
     dispatch(LOGIN({ ...user, saved: updatedSavedPosts }));
-    sessionStorage.setItem(
+    localStorage.setItem(
       "user",
       JSON.stringify({ ...user, saved: updatedSavedPosts })
     );
@@ -62,7 +62,7 @@ const Posts = (props: any) => {
   const handleShare = (e: any) => {
     e.stopPropagation();
     navigator.clipboard.writeText(
-      `https://socialite-app.vercel.app/post/${post._id}`
+      `https://socialite-apps.vercel.app/post/${post._id}`
     );
     toast.success("Copied to clipboard 👍", {
       duration: 2000,

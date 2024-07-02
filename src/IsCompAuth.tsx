@@ -8,7 +8,7 @@ export default function isAuth(Component: any) {
         const dispatch = useDispatch();
         const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
         useEffect(() => {
-            const user = sessionStorage.getItem("user");
+            const user = localStorage.getItem("user");
             if (user) {
                 dispatch(LOGIN(JSON.parse(user)));
             } else if (!isAuthenticated) {

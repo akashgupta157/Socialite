@@ -130,7 +130,7 @@ const Profile = () => {
         config
       );
       setUserDetails(data.user);
-      sessionStorage.setItem(
+      localStorage.setItem(
         "user",
         JSON.stringify({ ...data.user, token: user.token })
       );

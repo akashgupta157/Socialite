@@ -43,7 +43,7 @@ export default function Register() {
                     secondary: "#17C60D"
                 }
             })
-            sessionStorage.setItem('user', JSON.stringify({ ...data.user, token: data.token }))
+            localStorage.setItem('user', JSON.stringify({ ...data.user, token: data.token }))
             dispatch(LOGIN({ ...data.user, token: data.token }))
             router.push('/home')
         } else {

@@ -44,7 +44,7 @@ export default function Login() {
           secondary: "#17C60D",
         },
       });
-      sessionStorage.setItem(
+      localStorage.setItem(
         "user",
         JSON.stringify({ ...data.user, token: data.token })
       );

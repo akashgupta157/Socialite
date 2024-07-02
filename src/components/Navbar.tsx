@@ -161,7 +161,7 @@ const Navbar = () => {
           </div>
           <span
             onClick={() => {
-              sessionStorage.removeItem("user");
+              localStorage.removeItem("user");
               dispatch(LOGOUT());
               router.push("/login");
             }}
