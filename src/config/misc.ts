@@ -59,7 +59,7 @@ export const formatHashtags = (content: string) => {
     .split(" ")
     .map((str, i) => {
       if (str.startsWith("#") && str.length > 1) {
-        return `<a href='#' key=${i} class='text-blue-500'>${str} </a>`;
+        return `<a href='#' key=${i} style='color:blue;font-weight:bold'>${str} </a>`;
       }
       return str + " ";
     })
