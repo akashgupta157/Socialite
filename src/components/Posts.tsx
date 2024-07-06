@@ -1,6 +1,6 @@
 import axios from "axios";
 import isAuth from "@/IsCompAuth";
-import { formatHashtags, formatNumber, profilePic_fallbackSrc } from "../config/misc";
+import {  formatNumber, formatPost, profilePic_fallbackSrc } from "../config/misc";
 import React, { useEffect, useRef, useState } from "react";
 import { configure, timeAgo } from "../config/misc";
 import { LOGIN } from "@/redux/slices/userSlice";
@@ -57,7 +57,7 @@ const Posts = (props: any) => {
     );
   };
   useEffect(() => {
-    setText(formatHashtags(post?.content));
+    setText(formatPost(post?.content));
   }, [post]);
   const handleShare = (e: any) => {
     e.stopPropagation();

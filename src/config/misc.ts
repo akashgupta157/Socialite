@@ -55,15 +55,29 @@ export function timeAgo(date: string): string {
   }
 }
 export const formatHashtags = (content: string) => {
-  return content
-    .split(" ")
-    .map((str, i) => {
-      if (str.startsWith("#") && str.length > 1) {
-        return `<a href='#' key=${i} style='color:blue;font-weight:bold'>${str} </a>`;
-      }
-      return str + " ";
-    })
-    .join("");
+  return content;
+  // .split(" ")
+  // .map((str, i) => {
+  //   if (str.startsWith("#") && str.length > 1) {
+  //     return `<a href='#' key=${i} style='color:blue;font-weight:bold'>${str} </a>`;
+  //   }
+  //   return str + " ";
+  // })
+  // .join("");
+};
+export const formatPost = (post: string) => {
+  const urlPattern = /(https?:\/\/[^\s<]+)/g;
+  let formattedPost = post.replace(
+    urlPattern,
+    '<a href="$1" style="color: blue;" target="_blank" rel="noopener noreferrer">$1</a>'
+  );
+  const hashtagPattern = /#(\w+)/g;
+  formattedPost = formattedPost.replace(
+    hashtagPattern,
+    '<span style="color: blue;font-weight:bold">#$1</span>'
+  );
+  formattedPost = formattedPost.replace(/<br>/g, "<br />");
+  return formattedPost;
 };
 export function formatDateAndTime(timestamp: any): any {
   const date = new Date(timestamp);

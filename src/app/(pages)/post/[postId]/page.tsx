@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   configure,
   formatDateAndTime,
-  formatHashtags,
   formatNumber,
+  formatPost,
   profilePic_fallbackSrc,
 } from "@/config/misc";
 import { usePathname, useRouter } from "next/navigation";
@@ -103,7 +103,7 @@ const Post = () => {
   };
   useEffect(() => {
     if (!postDetail) return;
-    setText(formatHashtags(postDetail?.content));
+    setText(formatPost(postDetail?.content));
   }, [postDetail]);
   const handleShare = (e: any) => {
     e.stopPropagation();
