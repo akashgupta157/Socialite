@@ -54,17 +54,6 @@ export function timeAgo(date: string): string {
     return timestamp.toLocaleDateString("en-US", options);
   }
 }
-export const formatHashtags = (content: string) => {
-  return content;
-  // .split(" ")
-  // .map((str, i) => {
-  //   if (str.startsWith("#") && str.length > 1) {
-  //     return `<a href='#' key=${i} style='color:blue;font-weight:bold'>${str} </a>`;
-  //   }
-  //   return str + " ";
-  // })
-  // .join("");
-};
 export const formatPost = (post: string) => {
   const urlPattern = /(https?:\/\/[^\s<]+)/g;
   let formattedPost = post.replace(
