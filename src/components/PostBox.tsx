@@ -8,6 +8,7 @@ import { configure, uploadCloudinary } from "../config/misc";
 import toast from "react-hot-toast";
 import { UPDATE_FEED } from "@/redux/slices/feedSlice";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 export default function PostBox() {
   const dispatch = useDispatch();
   const pathname = usePathname();
@@ -35,12 +36,12 @@ export default function PostBox() {
     newFiles.splice(index, 1);
     setSelectedFiles(newFiles);
   };
-  const handleOutsideClick = (event: any) => {
-    if (isEmojiOpen && !event.target.closest(".emoji-dropdown")) {
-      setEmojiOpen(false);
-    }
-  };
   useEffect(() => {
+    const handleOutsideClick = (event: any) => {
+      if (isEmojiOpen && !event.target.closest(".emoji-dropdown")) {
+        setEmojiOpen(false);
+      }
+    };
     window.addEventListener("click", handleOutsideClick);
     return () => {
       window.removeEventListener("click", handleOutsideClick);
@@ -144,9 +145,12 @@ export default function PostBox() {
                 >
                   <X />
                 </div>
-                <img
+                <Image
                   src={URL.createObjectURL(file)}
                   alt={`Selected File ${index}`}
+                  unoptimized
+                  width={200}
+                  height={200}
                   className={`rounded-lg max-h-[200px] object-contain ${additionalClasses()}`}
                 />
               </div>
